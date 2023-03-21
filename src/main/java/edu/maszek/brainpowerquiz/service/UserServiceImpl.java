@@ -15,6 +15,21 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Override
+    public List<UserEntity> getAllUsers() {
+        List<UserEntity> usersOptional = userRepository.findAll();
+        if(usersOptional.size() > 0) return usersOptional;
+        else return new ArrayList<>();
+    }
+
+    @Override
+    public UserEntity getUserByName(String name) throws UserCollectionException {
+        Optional<UserEntity> user = userRepository.findByName(name);
+        if(user.isPresent()) return user.get();
+        else throw new UserCollectionException(UserCollectionException.NotFoundException(name));
+    }
+
     @Override
     public void registerUser(UserEntity userEntity) throws ConstraintViolationException, UserCollectionException {
         Optional<UserEntity> userOptional = userRepository.findById(userEntity.getName());
@@ -23,11 +38,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAllUsers() {
-        System.out.println("Before get all users");
-        List<UserEntity> users = userRepository.findAll();
-        System.out.println("After get all users");
-        if(users.size() > 0) return users;
-        else return new ArrayList<>();
+    public void updateUser(String previousName, UserEntity userEntity) throws UserCollectionException {
+        String userName = userEntity.getName();
+        Optional<UserEntity> userOptional = userRepository.findByName(userName);
+
+        // User with given name already exists
+        if(userOptional.isPresent()) {
+            throw new UserCollectionException(UserCollectionException.AlreadyExists());
+        } else {
+            deleteUserByName(previousName);
+            registerUser(userEntity);
+        }
+    }
+
+    @Override
+    public void deleteUserByName(String name) throws UserCollectionException {
+        Optional<UserEntity> userOptional = userRepository.findByName(name);
+        if(userOptional.isPresent()) userRepository.deleteByName(name);
+        else throw new UserCollectionException(UserCollectionException.NotFoundException(name));
     }
 }

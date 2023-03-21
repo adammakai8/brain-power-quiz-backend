@@ -1,7 +1,9 @@
 package edu.maszek.brainpowerquiz.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -13,11 +15,13 @@ import java.util.Date;
 @Document(collection="user")
 public class UserEntity {
     @Id
+    private String _id;
+    @Indexed(unique = true)
     private String name;
-    @NonNull
+    @NotNull
     private String email;
-    @NonNull
-    private int birthYear;
-    @NonNull
+    @NotNull
+    private Integer birthYear;
+    @NotNull
     private String password;
 }

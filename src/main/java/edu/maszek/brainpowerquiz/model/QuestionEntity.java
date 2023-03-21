@@ -1,6 +1,10 @@
 package edu.maszek.brainpowerquiz.model;
 
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,11 +17,11 @@ import java.util.List;
 @Document(collection="question")
 public class QuestionEntity {
     @Id
-    private int id;
-    @NonNull
+    private String _id;
+    @NotNull
     private String text;
-    @NonNull
-    private int difficulty;
-    @NonNull
+    @NotNull
+    private Integer difficulty;
+    @NotNull
     private List<Answer> answers;
 }

@@ -6,7 +6,7 @@ public class UserCollectionException extends Exception {
     }
 
     public static String NotFoundException(String name) {
-        return "User with " + name + " not found!";
+        return "User with name " + name + " not found!";
     }
 
     public static String AlreadyExists() {

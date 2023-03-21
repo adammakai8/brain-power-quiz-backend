@@ -5,20 +5,14 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="game")
-public class GameEntity {
+@Document(collection="theme")
+public class ThemeEntity {
     @Id
     private String _id;
     @NotNull
-    private String name;
-    @NotNull
-    private Integer maximalPlayerNumber;
-    @NotNull
-    private Date closeDate;
+    private String text;
 }

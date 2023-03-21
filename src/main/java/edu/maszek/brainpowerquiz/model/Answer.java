@@ -1,7 +1,6 @@
 package edu.maszek.brainpowerquiz.model;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
@@ -11,5 +10,5 @@ public class Answer {
     @NonNull
     private String text;
     @NonNull
-    private boolean isCorrect;
+    private Boolean isCorrect;
 }
