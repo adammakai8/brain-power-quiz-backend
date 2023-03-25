@@ -50,7 +50,8 @@ public class ThemeServiceImpl implements ThemeService{
             ThemeEntity themeToUpdate = themeOptional.get();
 
             themeToUpdate.setText(themeEntity.getText());
-            themeToUpdate.updateCollections(themeEntity.getQuestions(), themeEntity.getGames());
+            themeToUpdate.setQuestions(themeEntity.getQuestions());
+            themeToUpdate.setGames(themeEntity.getGames());
             themeRepository.save(themeToUpdate);
         } else throw new ThemeCollectionException(ThemeCollectionException.NotFoundException(themeID));
     }

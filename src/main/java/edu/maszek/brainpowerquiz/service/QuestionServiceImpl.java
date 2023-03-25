@@ -49,7 +49,8 @@ public class QuestionServiceImpl implements QuestionService {
                 questionToUpdate.setText(questionEntity.getText());
                 questionToUpdate.setDifficulty(questionEntity.getDifficulty());
                 questionToUpdate.setAnswers(questionEntity.getAnswers());
-                questionToUpdate.updateCollections(questionEntity.getThemes(), questionEntity.getGames());
+                questionToUpdate.setThemes(questionEntity.getThemes());
+                questionToUpdate.setGames(questionEntity.getGames());
                 questionRepository.save(questionToUpdate);
             } else throw new QuestionCollectionException(QuestionCollectionException.MultipleCorrectAnswerNotAccepted());
         } else throw new QuestionCollectionException(QuestionCollectionException.NotFoundException(questionID));

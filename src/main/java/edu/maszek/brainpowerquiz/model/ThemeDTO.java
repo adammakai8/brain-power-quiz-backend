@@ -1,12 +1,11 @@
 package edu.maszek.brainpowerquiz.model;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,18 +14,10 @@ import java.util.stream.Stream;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="question")
-public class QuestionEntity {
+@Document(collection="theme")
+public class ThemeDTO {
     @Id
     private String _id;
-    @NotNull
+    @Indexed(unique = true)
     private String text;
-    @NotNull
-    private Integer difficulty;
-    @NotNull
-    private List<Answer> answers;
-    @DBRef(lazy = true)
-    private List<ThemeDTO> themes;
-    @DBRef(lazy = true)
-    private List<GameDTO> games;
 }
