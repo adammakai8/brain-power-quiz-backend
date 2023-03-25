@@ -3,6 +3,7 @@ package edu.maszek.brainpowerquiz.service;
 import edu.maszek.brainpowerquiz.exception.QuestionCollectionException;
 import edu.maszek.brainpowerquiz.model.Answer;
 import edu.maszek.brainpowerquiz.model.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.ThemeEntity;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class QuestionServiceImpl implements QuestionService {
                 questionToUpdate.setText(questionEntity.getText());
                 questionToUpdate.setDifficulty(questionEntity.getDifficulty());
                 questionToUpdate.setAnswers(questionEntity.getAnswers());
+                questionToUpdate.updateCollections(questionEntity.getThemes(), questionEntity.getGames());
                 questionRepository.save(questionToUpdate);
             } else throw new QuestionCollectionException(QuestionCollectionException.MultipleCorrectAnswerNotAccepted());
         } else throw new QuestionCollectionException(QuestionCollectionException.NotFoundException(questionID));

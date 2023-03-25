@@ -25,7 +25,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getQuestionByName(@PathVariable("id") String _id) {
+    public ResponseEntity<?> getQuestionByID(@PathVariable("id") String _id) {
         try {
             return new ResponseEntity<>(questionService.getQuestionByID(_id), HttpStatus.OK);
         } catch (QuestionCollectionException e) {

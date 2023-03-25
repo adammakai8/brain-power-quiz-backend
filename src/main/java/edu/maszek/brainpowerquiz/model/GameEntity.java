@@ -3,9 +3,12 @@ package edu.maszek.brainpowerquiz.model;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,10 +18,14 @@ import java.util.Date;
 public class GameEntity {
     @Id
     private String _id;
-    @NotNull
+    @Indexed(unique = true)
     private String name;
     @NotNull
     private Integer maximalPlayerNumber;
     @NotNull
     private Date closeDate;
+    @DBRef(lazy = true)
+    private List<ThemeEntity> themes;
+    @DBRef(lazy = true)
+    private List<QuestionEntity> questions;
 }
