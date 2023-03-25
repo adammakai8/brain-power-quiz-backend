@@ -1,9 +1,6 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
-import edu.maszek.brainpowerquiz.exception.GameCollectionException;
-import edu.maszek.brainpowerquiz.model.Answer;
-import edu.maszek.brainpowerquiz.model.GameEntity;
 import edu.maszek.brainpowerquiz.model.GameEntity;
 import edu.maszek.brainpowerquiz.repository.GameRepository;
 import jakarta.validation.ConstraintViolationException;

@@ -1,15 +1,16 @@
 package edu.maszek.brainpowerquiz.model;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -25,23 +26,15 @@ public class QuestionEntity {
     private Integer difficulty;
     @NotNull
     private List<Answer> answers;
-    @DBRef(lazy = true)
-    private List<ThemeEntity> themes;
-    @DBRef(lazy = true)
-    private List<GameEntity> games;
+    private List<String> themes;
+    private List<String> games;
 
-    public void updateCollections(List<ThemeEntity> themeEntities, List<GameEntity> gameEntities) {
-        // Ha egy adminfelületen módosíthatjuk a kapcsolatokat egyedek között, akkor felülírja a változtatás
-        // az eredetit
-        if(themeEntities != null) {
-            themes = themeEntities;
-        }
-        // Ha pedig nem módosítunk (mint pl. a játék is), akkor mindig hozzáfűzünk a meglévőhöz
-        if(gameEntities != null) {
-            if(games == null) {
-                games = new ArrayList<>();
-            }
-            games = Stream.concat(games.stream(), gameEntities.stream()).toList();
-        }
+    public QuestionEntity(QuestionDTO questionDTO) {
+        this._id = questionDTO.get_id();
+        this.text = questionDTO.getText();
+        this.difficulty = questionDTO.getDifficulty();
+        this.answers = questionDTO.getAnswers();
+        this.themes = new ArrayList<>(questionDTO.getThemes().stream().map(ThemeEntity::get_id).toList());
+        this.games = new ArrayList<>(questionDTO.getGames().stream().map(GameEntity::get_id).toList());
     }
 }

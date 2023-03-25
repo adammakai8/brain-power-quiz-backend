@@ -1,6 +1,9 @@
 package edu.maszek.brainpowerquiz.controller;
 
+import edu.maszek.brainpowerquiz.exception.GameCollectionException;
 import edu.maszek.brainpowerquiz.exception.QuestionCollectionException;
+import edu.maszek.brainpowerquiz.exception.ThemeCollectionException;
+import edu.maszek.brainpowerquiz.model.QuestionDTO;
 import edu.maszek.brainpowerquiz.model.QuestionEntity;
 import edu.maszek.brainpowerquiz.service.QuestionService;
 import jakarta.validation.ConstraintViolationException;
@@ -19,7 +22,7 @@ public class QuestionController {
 
     @GetMapping
     public ResponseEntity<?> getAllQuestions() {
-        List<QuestionEntity> questions = questionService.getAllQuestions();
+        List<QuestionDTO> questions = questionService.getAllQuestions();
         if(questions.size() > 0) return new ResponseEntity<>(questions, HttpStatus.OK);
         else return new ResponseEntity<>("No questions available", HttpStatus.NOT_FOUND);
     }
@@ -34,22 +37,22 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createQuestion(@RequestBody QuestionEntity questionEntity) {
+    public ResponseEntity<?> createQuestion(@RequestBody QuestionDTO questionDTO) {
         try {
-            questionService.createQuestion(questionEntity);
-            return new ResponseEntity<>("Created question with id " + questionEntity.get_id(), HttpStatus.OK);
+            questionService.createQuestion(questionDTO);
+            return new ResponseEntity<>("Created question with id " + questionDTO.get_id(), HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (QuestionCollectionException e) {
+        } catch (QuestionCollectionException | ThemeCollectionException | GameCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateQuestion(@RequestBody QuestionEntity questionEntity) {
+    public ResponseEntity<?> updateQuestion(@RequestBody QuestionDTO questionDTO) {
         try {
-            questionService.updateQuestion(questionEntity);
-            return new ResponseEntity<>("Updated question " + questionEntity.get_id(), HttpStatus.OK);
+            questionService.updateQuestion(questionDTO);
+            return new ResponseEntity<>("Updated question " + questionDTO.get_id(), HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (QuestionCollectionException e) {
@@ -62,7 +65,7 @@ public class QuestionController {
         try {
             questionService.deleteQuestionByID(id);
             return new ResponseEntity<>("Deleted question " + id, HttpStatus.OK);
-        } catch (QuestionCollectionException e) {
+        } catch (QuestionCollectionException | ThemeCollectionException | GameCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
