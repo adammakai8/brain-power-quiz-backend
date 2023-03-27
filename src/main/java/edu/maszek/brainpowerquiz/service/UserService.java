@@ -11,5 +11,5 @@ public interface UserService {
     public UserEntity getUserByName(String name) throws UserCollectionException;
     public void registerUser(UserEntity userEntity) throws ConstraintViolationException, UserCollectionException;
     public void updateUser(String previousName, UserEntity userEntity) throws UserCollectionException;
-    public void deleteUserByName(String name) throws UserCollectionException;
+    public void deleteUser(String name) throws UserCollectionException;
 }

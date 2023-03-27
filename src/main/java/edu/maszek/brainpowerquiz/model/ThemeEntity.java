@@ -1,14 +1,15 @@
 package edu.maszek.brainpowerquiz.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -20,8 +21,4 @@ public class ThemeEntity {
     private String _id;
     @Indexed(unique = true)
     private String text;
-    @DBRef(lazy = true)
-    private List<QuestionDTO> questions;
-    @DBRef(lazy = true)
-    private List<GameDTO> games;
 }

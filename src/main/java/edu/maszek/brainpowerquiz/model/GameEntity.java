@@ -24,8 +24,8 @@ public class GameEntity {
     private Integer maximalPlayerNumber;
     @NotNull
     private Date closeDate;
-    @DBRef(lazy = true)
+    @DBRef
     private List<ThemeEntity> themes;
-    @DBRef(lazy = true)
+    @DBRef
     private List<QuestionEntity> questions;
 }

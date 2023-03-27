@@ -6,27 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="question")
-public class QuestionEntity {
+@Document(collection="user")
+public class UserPropertyEntity {
     @Id
     private String _id;
+    @Indexed(unique = true)
+    private String name;
     @NotNull
-    private String text;
+    private String email;
     @NotNull
-    private Integer difficulty;
+    private Integer birthYear;
     @NotNull
-    private List<Answer> answers;
-    @DBRef
-    private List<ThemePropertyEntity> themes;
-    @DBRef
-    private List<GamePropertyEntity> games;
+    private String password;
 }

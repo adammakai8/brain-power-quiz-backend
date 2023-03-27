@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="question")
-public class QuestionDTO {
+public class QuestionPropertyEntity {
     @Id
     private String _id;
     @NotNull

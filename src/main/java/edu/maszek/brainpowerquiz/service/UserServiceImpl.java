@@ -32,8 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(UserEntity userEntity) throws ConstraintViolationException, UserCollectionException {
-        Optional<UserEntity> userOptional = userRepository.findById(userEntity.getName());
-        if(userOptional.isPresent()) throw new UserCollectionException(UserCollectionException.AlreadyExists());
+        String name = userEntity.getName();
+        Optional<UserEntity> userOptional = userRepository.findByName(name);
+        if(userOptional.isPresent()) throw new UserCollectionException(UserCollectionException.AlreadyExists(name));
         else userRepository.save(userEntity);
     }
 
@@ -43,18 +44,17 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> userOptional = userRepository.findByName(userName);
 
         // User with given name already exists
-        if(userOptional.isPresent()) {
-            throw new UserCollectionException(UserCollectionException.AlreadyExists());
-        } else {
-            deleteUserByName(previousName);
+        if(userOptional.isPresent()) throw new UserCollectionException(UserCollectionException.AlreadyExists(userName));
+        else {
+            deleteUser(previousName);
             registerUser(userEntity);
         }
     }
 
     @Override
-    public void deleteUserByName(String name) throws UserCollectionException {
-        Optional<UserEntity> userOptional = userRepository.findByName(name);
-        if(userOptional.isPresent()) userRepository.deleteByName(name);
-        else throw new UserCollectionException(UserCollectionException.NotFoundException(name));
+    public void deleteUser(String id) throws UserCollectionException {
+        Optional<UserEntity> userOptional = userRepository.findById(id);
+        if(userOptional.isPresent()) userRepository.deleteById(id);
+        else throw new UserCollectionException(UserCollectionException.NotFoundException(id));
     }
 }
