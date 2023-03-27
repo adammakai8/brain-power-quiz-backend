@@ -2,36 +2,60 @@ package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ForumCommentCollectionException;
 import edu.maszek.brainpowerquiz.model.ForumCommentEntity;
+import edu.maszek.brainpowerquiz.model.dto.ForumCommentDTO;
+import edu.maszek.brainpowerquiz.model.mapper.ForumCommentMapper;
 import edu.maszek.brainpowerquiz.repository.ForumCommentRepository;
+import edu.maszek.brainpowerquiz.repository.ForumRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ForumCommentServiceImpl implements ForumCommentService {
     @Autowired
     private ForumCommentRepository forumCommentRepository;
+    @Autowired
+    private ForumRepository forumRepository;
+    @Autowired
+    private ForumCommentMapper forumCommentMapper;
+
     @Override
-    public List<ForumCommentEntity> getAllForumComments() {
-        List<ForumCommentEntity> forumCommentsOptional = forumCommentRepository.findAll();
-        if(forumCommentsOptional.size() > 0) return forumCommentsOptional;
-        else return new ArrayList<>();
+    public List<ForumCommentDTO> getAllForumComments() {
+        return forumCommentRepository.findAll().stream().map(forumCommentMapper::mapToDto).collect(Collectors.toList());
     }
 
     @Override
-    public ForumCommentEntity getForumCommentByID(String id) throws ForumCommentCollectionException {
+    public ForumCommentDTO getForumCommentByID(String id) throws ForumCommentCollectionException {
         Optional<ForumCommentEntity> forumComment = forumCommentRepository.findById(id);
-        if(forumComment.isPresent()) return forumComment.get();
-        else throw new ForumCommentCollectionException(ForumCommentCollectionException.NotFoundException(id));
+        if(forumComment.isPresent()) {
+            return forumCommentMapper.mapToDto(forumComment.get());
+        } else {
+            throw new ForumCommentCollectionException(ForumCommentCollectionException.NotFoundException(id));
+        }
     }
 
     @Override
-    public void createForumComment(ForumCommentEntity forumCommentEntity) throws ConstraintViolationException {
-        forumCommentRepository.save(forumCommentEntity);
+    public String createForumComment(final ForumCommentDTO forumCommentToSave) throws ConstraintViolationException {
+        final String[] createdId = new String[1];
+        forumRepository.findById(forumCommentToSave.getParent().get_id()).ifPresentOrElse(
+                parentForum -> {
+                    final ForumCommentEntity entity = forumCommentRepository
+                            .save(forumCommentMapper.mapToEntity(forumCommentToSave));
+                    parentForum.getComments().add(entity);
+                    forumRepository.save(parentForum);
+                    createdId[0] = entity.get_id();
+                },
+                () -> {
+                    throw new HttpClientErrorException(HttpStatusCode.valueOf(404), "Parent forum not found!");
+                }
+        );
+        return createdId[0];
     }
 
     @Override

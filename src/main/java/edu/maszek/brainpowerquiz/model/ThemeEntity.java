@@ -6,9 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -21,7 +19,7 @@ public class ThemeEntity {
     @Indexed(unique = true)
     private String text;
     @DBRef(lazy = true)
-    private List<QuestionDTO> questions;
+    private List<QuestionPropertyEntity> questions;
     @DBRef(lazy = true)
-    private List<GameDTO> games;
+    private List<GamePropertyEntity> games;
 }

@@ -6,10 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -26,7 +23,7 @@ public class QuestionEntity {
     @NotNull
     private List<Answer> answers;
     @DBRef(lazy = true)
-    private List<ThemeDTO> themes;
+    private List<ThemePropertyEntity> themes;
     @DBRef(lazy = true)
-    private List<GameDTO> games;
+    private List<GamePropertyEntity> games;
 }
