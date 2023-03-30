@@ -21,4 +21,8 @@ public class ThemeEntity {
     private String _id;
     @Indexed(unique = true)
     private String text;
+    @DBRef
+    private List<QuestionPropertyEntity> questions;
+    @DBRef
+    private List<GamePropertyEntity> games;
 }

@@ -1,9 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ThemeCollectionException;
-import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.model.ThemeEntity;
-import edu.maszek.brainpowerquiz.model.UserEntity;
 import edu.maszek.brainpowerquiz.repository.ThemeRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +53,8 @@ public class ThemeServiceImpl implements ThemeService{
             ThemeEntity themeToUpdate = themeOptional.get();
 
             themeToUpdate.setText(themeEntity.getText());
-//            themeToUpdate.setQuestions(themeEntity.getQuestions());
-//            themeToUpdate.setGames(themeEntity.getGames());
+            themeToUpdate.setQuestions(themeEntity.getQuestions());
+            themeToUpdate.setGames(themeEntity.getGames());
             themeRepository.save(themeToUpdate);
         } else throw new ThemeCollectionException(ThemeCollectionException.NotFoundException(themeID));
     }
