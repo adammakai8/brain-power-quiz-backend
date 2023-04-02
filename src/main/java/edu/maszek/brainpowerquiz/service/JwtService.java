@@ -1,5 +1,6 @@
 package edu.maszek.brainpowerquiz.service;
 
+import edu.maszek.brainpowerquiz.model.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,7 +29,10 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> claims = new HashMap<>();
+        String role = ((UserEntity) userDetails).getRole().getName();
+        claims.put("Role", role);
+        return generateToken(claims, userDetails);
     }
 
     public String generateToken(

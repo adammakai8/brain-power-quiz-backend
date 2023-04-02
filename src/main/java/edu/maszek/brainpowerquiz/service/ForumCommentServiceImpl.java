@@ -15,6 +15,9 @@ import java.util.Optional;
 public class ForumCommentServiceImpl implements ForumCommentService {
     @Autowired
     private ForumCommentRepository forumCommentRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
+
     @Override
     public List<ForumCommentEntity> getAllForumComments() {
         List<ForumCommentEntity> forumCommentsOptional = forumCommentRepository.findAll();
@@ -32,6 +35,8 @@ public class ForumCommentServiceImpl implements ForumCommentService {
     @Override
     public void createForumComment(ForumCommentEntity forumCommentEntity) throws ConstraintViolationException {
         forumCommentRepository.save(forumCommentEntity);
+        connectionUpdateService.updateForumConnection("forumcomment", forumCommentEntity, "create");
+        connectionUpdateService.updateUserConnection("forumcomment", forumCommentEntity, "create");
     }
 
     @Override
@@ -50,7 +55,12 @@ public class ForumCommentServiceImpl implements ForumCommentService {
     @Override
     public void deleteForumCommentByID(String id) throws ForumCommentCollectionException {
         Optional<ForumCommentEntity> forumCommentOptional = forumCommentRepository.findById(id);
-        if(forumCommentOptional.isPresent()) forumCommentRepository.deleteById(id);
+        if(forumCommentOptional.isPresent()) {
+            ForumCommentEntity forumCommentEntity = forumCommentOptional.get();
+            connectionUpdateService.updateForumConnection("forumcomment", forumCommentEntity, "delete");
+            connectionUpdateService.updateUserConnection("forumcomment", forumCommentEntity, "delete");
+            forumCommentRepository.deleteById(id);
+        }
         else throw new ForumCommentCollectionException(ForumCommentCollectionException.NotFoundException(id));
     }
 }

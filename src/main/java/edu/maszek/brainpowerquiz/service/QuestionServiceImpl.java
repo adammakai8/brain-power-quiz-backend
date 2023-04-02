@@ -3,7 +3,6 @@ package edu.maszek.brainpowerquiz.service;
 import edu.maszek.brainpowerquiz.exception.QuestionCollectionException;
 import edu.maszek.brainpowerquiz.model.Answer;
 import edu.maszek.brainpowerquiz.model.QuestionEntity;
-import edu.maszek.brainpowerquiz.model.ThemeEntity;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,8 @@ import java.util.Optional;
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
     @Override
     public List<QuestionEntity> getAllQuestions() {
         List<QuestionEntity> questionsOptional = questionRepository.findAll();
@@ -33,7 +34,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void createQuestion(QuestionEntity questionEntity) throws ConstraintViolationException, QuestionCollectionException {
-        if(checkCorrectAnswerCount(questionEntity)) questionRepository.save(questionEntity);
+        if(checkCorrectAnswerCount(questionEntity)) {
+            questionRepository.save(questionEntity);
+            connectionUpdateService.updateThemeConnection( "question", questionEntity, "create");
+            connectionUpdateService.updateGameConnection("question", questionEntity, "create");
+        }
         else throw new QuestionCollectionException(QuestionCollectionException.MultipleCorrectAnswerNotAccepted());
     }
 
@@ -51,6 +56,8 @@ public class QuestionServiceImpl implements QuestionService {
                 questionToUpdate.setAnswers(questionEntity.getAnswers());
                 questionToUpdate.setThemes(questionEntity.getThemes());
                 questionToUpdate.setGames(questionEntity.getGames());
+                connectionUpdateService.updateThemeConnection( "question", questionEntity, "update");
+                connectionUpdateService.updateGameConnection("question", questionEntity, "update");
                 questionRepository.save(questionToUpdate);
             } else throw new QuestionCollectionException(QuestionCollectionException.MultipleCorrectAnswerNotAccepted());
         } else throw new QuestionCollectionException(QuestionCollectionException.NotFoundException(questionID));
@@ -59,7 +66,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestionByID(String id) throws QuestionCollectionException {
         Optional<QuestionEntity> questionOptional = questionRepository.findById(id);
-        if(questionOptional.isPresent()) questionRepository.deleteById(id);
+        if(questionOptional.isPresent()) {
+            QuestionEntity questionEntity = questionOptional.get();
+            connectionUpdateService.updateThemeConnection( "question", questionEntity, "delete");
+            connectionUpdateService.updateGameConnection("question", questionEntity, "delete");
+            questionRepository.deleteById(id);
+        }
         else throw new QuestionCollectionException(QuestionCollectionException.NotFoundException(id));
     }
 

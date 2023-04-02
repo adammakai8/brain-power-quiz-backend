@@ -16,7 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="theme")
-public class ThemeEntity {
+public class ThemeEntity
+{
     @Id
     private String _id;
     @Indexed(unique = true)
