@@ -15,6 +15,9 @@ import java.util.Optional;
 public class ForumServiceImpl implements ForumService {
     @Autowired
     private ForumRepository forumRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
+
     @Override
     public List<ForumEntity> getAllForums() {
         List<ForumEntity> forumsOptional = forumRepository.findAll();
@@ -32,6 +35,7 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public void createForum(ForumEntity forumEntity) throws ConstraintViolationException {
         forumRepository.save(forumEntity);
+        connectionUpdateService.updateUserConnection("forum", forumEntity, "create");
     }
 
     @Override
@@ -50,7 +54,12 @@ public class ForumServiceImpl implements ForumService {
     @Override
     public void deleteForumByID(String id) throws ForumCollectionException {
         Optional<ForumEntity> forumOptional = forumRepository.findById(id);
-        if(forumOptional.isPresent()) forumRepository.deleteById(id);
+        if(forumOptional.isPresent()) {
+            ForumEntity forumEntity = forumOptional.get();
+            connectionUpdateService.updateUserConnection("forum", forumEntity, "delete");
+            connectionUpdateService.updateForumCommentConnection("forum", forumEntity, "delete");
+            forumRepository.deleteById(id);
+        }
         else throw new ForumCollectionException(ForumCollectionException.NotFoundException(id));
     }
 }

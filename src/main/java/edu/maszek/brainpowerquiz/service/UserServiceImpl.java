@@ -17,6 +17,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -54,7 +56,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String id) throws UserCollectionException {
         Optional<UserEntity> userOptional = userRepository.findById(id);
-        if(userOptional.isPresent()) userRepository.deleteById(id);
+        if(userOptional.isPresent()) {
+            UserEntity userEntity = userOptional.get();
+            connectionUpdateService.updateForumConnection("user", userEntity, "delete");
+            connectionUpdateService.updateForumCommentConnection("user", userEntity, "delete");
+            userRepository.deleteById(id);
+        }
         else throw new UserCollectionException(UserCollectionException.NotFoundException(id));
     }
 }

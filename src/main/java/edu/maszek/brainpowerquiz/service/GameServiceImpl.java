@@ -18,6 +18,9 @@ import java.util.Optional;
 public class GameServiceImpl implements GameService {
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
+
     @Override
     public List<GameEntity> getAllGames() {
         List<GameEntity> gamesOptional = gameRepository.findAll();
@@ -41,6 +44,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public void createGame(GameEntity gameEntity) throws ConstraintViolationException {
         gameRepository.save(gameEntity);
+        connectionUpdateService.updateThemeConnection("game", gameEntity, "create");
+        connectionUpdateService.updateQuestionConnection("game", gameEntity, "create");
     }
 
     @Override
@@ -54,6 +59,8 @@ public class GameServiceImpl implements GameService {
             gameToUpdate.setName(gameEntity.getName());
             gameToUpdate.setMaximalPlayerNumber(gameEntity.getMaximalPlayerNumber());
             gameToUpdate.setCloseDate(gameEntity.getCloseDate());
+            connectionUpdateService.updateThemeConnection("game", gameEntity, "update");
+            connectionUpdateService.updateQuestionConnection("game", gameEntity, "update");
             gameRepository.save(gameToUpdate);
         } else throw new GameCollectionException(GameCollectionException.NotFoundException(gameID));
     }
@@ -61,7 +68,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public void deleteGameByID(String id) throws GameCollectionException {
         Optional<GameEntity> gameOptional = gameRepository.findById(id);
-        if(gameOptional.isPresent()) gameRepository.deleteById(id);
+        if(gameOptional.isPresent()) {
+            GameEntity gameEntity = gameOptional.get();
+            connectionUpdateService.updateThemeConnection("game", gameEntity, "delete");
+            connectionUpdateService.updateQuestionConnection("game", gameEntity, "delete");
+            gameRepository.deleteById(id);
+        }
         else throw new GameCollectionException(GameCollectionException.NotFoundException(id));
     }
 }

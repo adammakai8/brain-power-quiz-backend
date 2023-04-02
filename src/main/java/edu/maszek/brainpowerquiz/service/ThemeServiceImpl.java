@@ -15,6 +15,9 @@ import java.util.Optional;
 public class ThemeServiceImpl implements ThemeService{
     @Autowired
     private ThemeRepository themeRepository;
+    @Autowired
+    private ConnectionUpdateServiceImpl connectionUpdateService;
+
     @Override
     public List<ThemeEntity> getAllThemes() {
         List<ThemeEntity> themesOptional = themeRepository.findAll();
@@ -41,7 +44,11 @@ public class ThemeServiceImpl implements ThemeService{
         String text = themeEntity.getText();
         Optional<ThemeEntity> themeOptional = themeRepository.findByText(text);
         if(themeOptional.isPresent()) throw new ThemeCollectionException(ThemeCollectionException.AlreadyExists(text));
-        else themeRepository.save(themeEntity);
+        else {
+            themeRepository.save(themeEntity);
+            connectionUpdateService.updateQuestionConnection("theme", themeEntity, "create");
+            connectionUpdateService.updateGameConnection("theme", themeEntity, "create");
+        }
     }
 
     @Override
@@ -55,6 +62,8 @@ public class ThemeServiceImpl implements ThemeService{
             themeToUpdate.setText(themeEntity.getText());
             themeToUpdate.setQuestions(themeEntity.getQuestions());
             themeToUpdate.setGames(themeEntity.getGames());
+            connectionUpdateService.updateQuestionConnection("theme", themeEntity, "update");
+            connectionUpdateService.updateGameConnection("theme", themeEntity, "update");
             themeRepository.save(themeToUpdate);
         } else throw new ThemeCollectionException(ThemeCollectionException.NotFoundException(themeID));
     }
@@ -62,7 +71,12 @@ public class ThemeServiceImpl implements ThemeService{
     @Override
     public void deleteThemeByID(String id) throws ThemeCollectionException {
         Optional<ThemeEntity> themeOptional = themeRepository.findById(id);
-        if(themeOptional.isPresent()) themeRepository.deleteById(id);
+        if(themeOptional.isPresent()) {
+            ThemeEntity themeEntity = themeOptional.get();
+            connectionUpdateService.updateQuestionConnection("theme", themeEntity, "delete");
+            connectionUpdateService.updateGameConnection("theme", themeEntity, "delete");
+            themeRepository.deleteById(id);
+        }
         else throw new ThemeCollectionException(ThemeCollectionException.NotFoundException(id));
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class GameEntity {
     @NotNull
     private Date closeDate;
     @DBRef
-    private List<ThemeEntity> themes;
+    private List<ThemePropertyEntity> themes;
     @DBRef
-    private List<QuestionEntity> questions;
+    private List<QuestionPropertyEntity> questions;
 }
