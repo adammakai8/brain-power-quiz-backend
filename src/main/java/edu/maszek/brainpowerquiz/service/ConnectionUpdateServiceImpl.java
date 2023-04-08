@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,6 +98,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateForumCommentUserConnection(UserEntity object, String mode, ForumCommentRepository repository, List<ForumCommentEntity> forumcomments) {
+        if(object.getForumComments() == null) return;
         List<String> forum_commentIDs_from_user = object.getForumComments().stream().map(ForumCommentPropertyEntity::get_id).toList();
         forumcomments = forumcomments.stream().filter(forumcomment -> forum_commentIDs_from_user.contains(forumcomment.get_id())).collect(Collectors.toList());
         if (mode.equals("delete")) {
@@ -108,6 +110,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateForumCommentForumConnection(ForumEntity object, String mode, ForumCommentRepository repository, List<ForumCommentEntity> forumcomments) {
+        if(object.getComments() == null) return;
         List<String> forum_commentIDs_from_forum = object.getComments().stream().map(ForumCommentPropertyEntity::get_id).toList();
         forumcomments = forumcomments.stream().filter(forumcomment -> forum_commentIDs_from_forum.contains(forumcomment.get_id())).collect(Collectors.toList());
         if (mode.equals("delete")) {
@@ -206,6 +209,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateForumUserConnection(UserEntity object, String mode, ForumRepository repository, List<ForumEntity> forums) {
+        if(object.getForums() == null) return;
         List<String> forumIDs_from_user = object.getForums().stream().map(ForumPropertyEntity::get_id).toList();
         forums = forums.stream().filter(forum -> forumIDs_from_user.contains(forum.get_id())).collect(Collectors.toList());
         if (mode.equals("delete")) {
@@ -217,6 +221,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private static void updateThemeQuestionConnection(QuestionEntity object, String mode, ThemeRepository repository, List<ThemeEntity> themes) {
+        if(object.getThemes() == null) return;
         List<String> themeIDs_from_question = object.getThemes().stream().map(ThemePropertyEntity::get_id).toList();
         themes = themes.stream().filter(theme -> themeIDs_from_question.contains(theme.get_id())).collect(Collectors.toList());
         List<ThemeEntity> previousQuestionThemes = new ArrayList<>();
@@ -289,6 +294,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private static void updateThemeGameConnection(GameEntity object, String mode, ThemeRepository repository, List<ThemeEntity> themes) {
+        if(object.getThemes() == null) return;
         List<String> themeIDs_from_game = object.getThemes().stream().map(ThemePropertyEntity::get_id).toList();
         themes = themes.stream().filter(theme -> themeIDs_from_game.contains(theme.get_id())).collect(Collectors.toList());
         List<ThemeEntity> previousGameThemes = new ArrayList<>();
@@ -361,6 +367,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private static void updateQuestionGameConnection(GameEntity object, String mode, QuestionRepository repository, List<QuestionEntity> questions) {
+        if(object.getQuestions() == null) return;
         List<String> questionIDs_from_game = object.getQuestions().stream().map(QuestionPropertyEntity::get_id).toList();
         questions = questions.stream().filter(question -> questionIDs_from_game.contains(question.get_id())).collect(Collectors.toList());
         List<QuestionEntity> previousGameQuestions = new ArrayList<>();
@@ -433,6 +440,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateGameQuestionConnection(QuestionEntity object, String mode, GameRepository repository, List<GameEntity> games) {
+        if(object.getGames() == null) return;
         List<String> gameIDs_from_question = object.getGames().stream().map(GamePropertyEntity::get_id).toList();
         games = games.stream().filter(game -> gameIDs_from_question.contains(game.get_id())).collect(Collectors.toList());
         List<GameEntity> previosGameQuestions = new ArrayList<>();
@@ -505,6 +513,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateQuestionThemeConnection(ThemeEntity object, String mode, List<QuestionEntity> questions) {
+        if(object.getQuestions() == null) return;
         List<String> questionIDs_from_theme = object.getQuestions().stream().map(QuestionPropertyEntity::get_id).toList();
         questions = questions.stream().filter(question -> questionIDs_from_theme.contains(question.get_id())).collect(Collectors.toList());
         List<QuestionEntity> previousThemeQuestions = new ArrayList<>();
@@ -569,6 +578,7 @@ public class ConnectionUpdateServiceImpl {
     }
 
     private void updateGameThemeConnection(ThemeEntity object, String mode, GameRepository repository, List<GameEntity> games) {
+        if(object.getGames() == null) return;
         List<String> gameIDs_from_theme = object.getGames().stream().map(GamePropertyEntity::get_id).toList();
         games = games.stream().filter(game -> gameIDs_from_theme.contains(game.get_id())).collect(Collectors.toList());
         List<GameEntity> previousThemeGames = new ArrayList<>();

@@ -4,7 +4,6 @@ import edu.maszek.brainpowerquiz.auth.AuthenticationRequest;
 import edu.maszek.brainpowerquiz.auth.AuthenticationResponse;
 import edu.maszek.brainpowerquiz.auth.RegisterRequest;
 import edu.maszek.brainpowerquiz.exception.AuthenticationException;
-import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
