@@ -1,23 +1,21 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
-import edu.maszek.brainpowerquiz.exception.GameCollectionException;
-import edu.maszek.brainpowerquiz.model.Answer;
-import edu.maszek.brainpowerquiz.model.GameEntity;
-import edu.maszek.brainpowerquiz.model.GameEntity;
+import edu.maszek.brainpowerquiz.model.*;
 import edu.maszek.brainpowerquiz.repository.GameRepository;
-import jakarta.validation.ConstraintViolationException;
+import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameServiceImpl implements GameService {
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
     @Autowired
     private ConnectionUpdateServiceImpl connectionUpdateService;
 
@@ -42,10 +40,33 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void createGame(GameEntity gameEntity) throws ConstraintViolationException {
+    public GameEntity createGame(GameCreationData gameData) {
+        final List<String> gameThemeIds = gameData.getThemes().stream().map(ThemePropertyEntity::get_id).toList();
+        final List<QuestionEntity> questionsOfThemes = questionRepository.findAll().stream()
+                .filter(question -> question.getThemes().stream()
+                        .map(ThemePropertyEntity::get_id)
+                        .anyMatch(gameThemeIds::contains))
+                .toList();
+
+        final List<QuestionPropertyEntity> generatedQuestions = getRandomQuestionsbyDifficulty(
+                questionsOfThemes, gameData.getEasyQuestions(), 0);
+        generatedQuestions.addAll(getRandomQuestionsbyDifficulty(
+                questionsOfThemes, gameData.getMediumQuestions(), 1));
+        generatedQuestions.addAll(getRandomQuestionsbyDifficulty(
+                questionsOfThemes, gameData.getHardQuestions(), 2));
+
+
+        final GameEntity gameEntity = GameEntity.builder()
+                .name(gameData.getName())
+                .maximalPlayerNumber(gameData.getMaximalPlayerNumber())
+                .closeDate(gameData.getCloseDate())
+                .themes(gameData.getThemes())
+                .questions(generatedQuestions)
+                .build();
         gameRepository.save(gameEntity);
         connectionUpdateService.updateThemeConnection("game", gameEntity, "create");
         connectionUpdateService.updateQuestionConnection("game", gameEntity, "create");
+        return gameEntity;
     }
 
     @Override
@@ -75,5 +96,24 @@ public class GameServiceImpl implements GameService {
             gameRepository.deleteById(id);
         }
         else throw new GameCollectionException(GameCollectionException.NotFoundException(id));
+    }
+
+    private List<QuestionPropertyEntity> getRandomQuestionsbyDifficulty(
+            final List<QuestionEntity> questionPool,
+            final Integer questionQuantity,
+            final Integer difficulty
+    ) {
+        return questionPool.stream()
+                .filter(question -> Objects.equals(question.getDifficulty(), difficulty))
+                .map(question -> QuestionPropertyEntity.builder()
+                        ._id(question.get_id())
+                        .text(question.getText())
+                        .difficulty(question.getDifficulty())
+                        .answers(question.getAnswers())
+                        .build())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    Collections.shuffle(list);
+                    return list;
+                })).subList(0, questionQuantity);
     }
 }

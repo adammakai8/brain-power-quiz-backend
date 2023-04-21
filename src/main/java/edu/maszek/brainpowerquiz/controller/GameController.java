@@ -1,9 +1,11 @@
 package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
+import edu.maszek.brainpowerquiz.model.GameCreationData;
 import edu.maszek.brainpowerquiz.model.GameEntity;
 import edu.maszek.brainpowerquiz.service.GameService;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/games")
 public class GameController {
     @Autowired
@@ -43,10 +46,12 @@ public class GameController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createGame(@RequestBody GameEntity gameEntity) {
+    public ResponseEntity<?> createGame(@RequestBody GameCreationData gameData) {
         try {
-            gameService.createGame(gameEntity);
-            return new ResponseEntity<>("Created game with id " + gameEntity.get_id(), HttpStatus.OK);
+            final GameEntity game = gameService.createGame(gameData);
+            final String msg = "Created game with id " + game.get_id();
+            log.debug(msg);
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GameCollectionException e) {
