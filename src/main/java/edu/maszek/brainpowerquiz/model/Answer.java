@@ -1,10 +1,10 @@
 package edu.maszek.brainpowerquiz.model;
 
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Builder
@@ -13,8 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Answer {
-    @NonNull
+    @NotNull
     private String text;
-    @NonNull
+    @NotNull
     private Boolean isCorrect;
 }

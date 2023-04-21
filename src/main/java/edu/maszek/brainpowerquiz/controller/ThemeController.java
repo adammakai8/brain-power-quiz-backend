@@ -7,6 +7,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +20,7 @@ public class ThemeController {
 
     @GetMapping
     public ResponseEntity<?> getAllThemes() {
-        List<ThemeEntity> themes = themeService.getAllThemes();
-        if(themes.size() > 0) return new ResponseEntity<>(themes, HttpStatus.OK);
-        else return new ResponseEntity<>("No themes available", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(themeService.getAllThemes(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -46,7 +45,7 @@ public class ThemeController {
     public ResponseEntity<?> createTheme(@RequestBody ThemeEntity themeEntity) {
         try {
             themeService.createTheme(themeEntity);
-            return new ResponseEntity<>("Created theme with id " + themeEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (ThemeCollectionException e) {
@@ -58,7 +57,7 @@ public class ThemeController {
     public ResponseEntity<?> updateTheme(@RequestBody ThemeEntity themeEntity) {
         try {
             themeService.updateTheme(themeEntity);
-            return new ResponseEntity<>("Updated theme " + themeEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (ThemeCollectionException e) {
@@ -67,10 +66,10 @@ public class ThemeController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteThemeByID(@PathVariable("id") String id) {
+    public ResponseEntity<String> deleteThemeByID(@PathVariable("id") String id) {
         try {
             themeService.deleteThemeByID(id);
-            return new ResponseEntity<>("Deleted theme " + id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ThemeCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

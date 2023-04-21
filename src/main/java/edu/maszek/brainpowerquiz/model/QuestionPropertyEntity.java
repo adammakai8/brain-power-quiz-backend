@@ -1,7 +1,12 @@
 package edu.maszek.brainpowerquiz.model;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

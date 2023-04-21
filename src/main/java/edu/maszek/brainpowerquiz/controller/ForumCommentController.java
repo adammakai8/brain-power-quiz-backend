@@ -19,9 +19,7 @@ public class ForumCommentController {
 
     @GetMapping
     public ResponseEntity<?> getAllForumComments() {
-        List<ForumCommentEntity> forumComments = forumCommentService.getAllForumComments();
-        if(forumComments.size() > 0) return new ResponseEntity<>(forumComments, HttpStatus.OK);
-        else return new ResponseEntity<>("No forumComments available", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(forumCommentService.getAllForumComments(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +35,7 @@ public class ForumCommentController {
     public ResponseEntity<?> createForumComment(@RequestBody ForumCommentEntity forumCommentEntity) {
         try {
             forumCommentService.createForumComment(forumCommentEntity);
-            return new ResponseEntity<>("Created forumComment with id " + forumCommentEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -47,7 +45,7 @@ public class ForumCommentController {
     public ResponseEntity<?> updateForumComment(@RequestBody ForumCommentEntity forumCommentEntity) {
         try {
             forumCommentService.updateForumComment(forumCommentEntity);
-            return new ResponseEntity<>("Updated forumComment " + forumCommentEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (ForumCommentCollectionException e) {
@@ -59,7 +57,7 @@ public class ForumCommentController {
     public ResponseEntity<?> deleteForumCommentByID(@PathVariable("id") String id) {
         try {
             forumCommentService.deleteForumCommentByID(id);
-            return new ResponseEntity<>("Deleted forumComment " + id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ForumCommentCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

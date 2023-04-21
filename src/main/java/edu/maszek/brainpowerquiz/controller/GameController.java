@@ -22,9 +22,7 @@ public class GameController {
 
     @GetMapping
     public ResponseEntity<?> getAllGames() {
-        List<GameEntity> games = gameService.getAllGames();
-        if(games.size() > 0) return new ResponseEntity<>(games, HttpStatus.OK);
-        else return new ResponseEntity<>("No games available", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(gameService.getAllGames(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -51,7 +49,7 @@ public class GameController {
             final GameEntity game = gameService.createGame(gameData);
             final String msg = "Created game with id " + game.get_id();
             log.debug(msg);
-            return new ResponseEntity<>(msg, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (GameCollectionException e) {
@@ -63,7 +61,7 @@ public class GameController {
     public ResponseEntity<?> updateGame(@RequestBody GameEntity gameEntity) {
         try {
             gameService.updateGame(gameEntity);
-            return new ResponseEntity<>("Updated game " + gameEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (GameCollectionException e) {
@@ -75,7 +73,7 @@ public class GameController {
     public ResponseEntity<?> deleteGameByID(@PathVariable("id") String id) {
         try {
             gameService.deleteGameByID(id);
-            return new ResponseEntity<>("Deleted game " + id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (GameCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

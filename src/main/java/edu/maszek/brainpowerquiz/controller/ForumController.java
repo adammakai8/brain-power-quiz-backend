@@ -19,9 +19,7 @@ public class ForumController {
 
     @GetMapping
     public ResponseEntity<?> getAllForums() {
-        List<ForumEntity> forums = forumService.getAllForums();
-        if(forums.size() > 0) return new ResponseEntity<>(forums, HttpStatus.OK);
-        else return new ResponseEntity<>("No forums available", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(forumService.getAllForums(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +35,7 @@ public class ForumController {
     public ResponseEntity<?> createForum(@RequestBody ForumEntity forumEntity) {
         try {
             forumService.createForum(forumEntity);
-            return new ResponseEntity<>("Created forum with id " + forumEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -47,7 +45,7 @@ public class ForumController {
     public ResponseEntity<?> updateForum(@RequestBody ForumEntity forumEntity) {
         try {
             forumService.updateForum(forumEntity);
-            return new ResponseEntity<>("Updated forum " + forumEntity.get_id(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (ForumCollectionException e) {
@@ -59,7 +57,7 @@ public class ForumController {
     public ResponseEntity<?> deleteForumByID(@PathVariable("id") String id) {
         try {
             forumService.deleteForumByID(id);
-            return new ResponseEntity<>("Deleted forum " + id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ForumCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

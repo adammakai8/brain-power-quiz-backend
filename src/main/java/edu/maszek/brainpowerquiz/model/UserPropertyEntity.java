@@ -1,6 +1,6 @@
 package edu.maszek.brainpowerquiz.model;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class UserPropertyEntity {
     @Id
     private String _id;
     @Indexed(unique = true)
-    private String name;
+    private String username;
     @NotNull
     private String email;
     @NotNull

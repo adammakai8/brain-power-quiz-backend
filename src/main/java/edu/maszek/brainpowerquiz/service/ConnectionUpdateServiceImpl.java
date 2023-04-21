@@ -298,7 +298,7 @@ public class ConnectionUpdateServiceImpl {
         themes = themes.stream().filter(theme -> themeIDs_from_game.contains(theme.get_id())).collect(Collectors.toList());
         List<ThemeEntity> previousGameThemes = new ArrayList<>();
         for (ThemeEntity themeEntity : repository.findAll()) {
-            if (themeEntity.getQuestions() != null) {
+            if (themeEntity.getGames() != null) {
                 for (GamePropertyEntity game : themeEntity.getGames()) {
                     if (game.get_id().equals(object.get_id()))
                         previousGameThemes.add(themeEntity);

@@ -1,7 +1,10 @@
 package edu.maszek.brainpowerquiz.model;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,8 +19,10 @@ public class ForumCommentEntity {
     private String _id;
     @NotNull
     private String text;
+    @NotNull
     @DBRef
     private ForumPropertyEntity parent;
+    @NotNull
     @DBRef
     private UserPropertyEntity author;
 }

@@ -20,9 +20,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
-        List<UserEntity> users = userService.getAllUsers();
-        if(users.size() > 0) return new ResponseEntity<>(users, HttpStatus.OK);
-        else return new ResponseEntity<>("No users available", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
@@ -38,7 +36,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable("previousName") String previousName, @RequestBody @Valid UserEntity userEntity) {
         try {
             userService.updateUser(previousName, userEntity);
-            return new ResponseEntity<>("Updated user with name " + userEntity.getUsername(), HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (UserCollectionException e) {
@@ -50,7 +48,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         try {
             userService.deleteUser(id);
-            return new ResponseEntity<>("Deleted user with id " + id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (UserCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
