@@ -38,4 +38,8 @@ public class GameEntity {
     @NotNull
     @DBRef
     private List<QuestionPropertyEntity> questions;
+
+    public boolean isFull() {
+        return players.size() == maximalPlayerNumber;
+    }
 }

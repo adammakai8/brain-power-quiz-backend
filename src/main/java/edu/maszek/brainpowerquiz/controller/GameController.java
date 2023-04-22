@@ -1,15 +1,20 @@
 package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
+import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.model.GameCreationData;
 import edu.maszek.brainpowerquiz.model.GameEntity;
 import edu.maszek.brainpowerquiz.service.GameService;
 import jakarta.validation.ConstraintViolationException;
+import javassist.tools.web.BadHttpRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -39,6 +44,18 @@ public class GameController {
         } catch (GameCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/start/{gameId}")
+    public ResponseEntity<?> startGame(@PathVariable("gameId") String gameId, Principal principal)
+            throws UserCollectionException, GameCollectionException, BadHttpRequest {
+        return new ResponseEntity<>(gameService.startGame(gameId, principal.getName()), HttpStatus.OK);
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<?> submitQuiz(@RequestBody Object[] answers) {
+        // TODO: pending implementation of saving the quiz answers
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/create")

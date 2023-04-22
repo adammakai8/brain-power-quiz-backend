@@ -1,9 +1,12 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
+import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.model.*;
 import edu.maszek.brainpowerquiz.repository.GameRepository;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
+import edu.maszek.brainpowerquiz.repository.UserRepository;
+import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private ConnectionUpdateServiceImpl connectionUpdateService;
 
@@ -42,6 +47,31 @@ public class GameServiceImpl implements GameService {
         Optional<GameEntity> game = gameRepository.findByName(name);
         if(game.isPresent()) return game.get();
         else throw new GameCollectionException(GameCollectionException.NotFoundByNameException(name));
+    }
+
+    @Override
+    public GameEntity startGame(String gameId, String username) throws UserCollectionException, GameCollectionException, BadHttpRequest {
+        final UserEntity currentUser = userService.getUserByName(username);
+
+        final GameEntity gameToPlay = getGameByID(gameId);
+        if (Objects.isNull(gameToPlay.getPlayers())) {
+            gameToPlay.setPlayers(new ArrayList<>());
+        }
+        if (gameToPlay.getPlayers().stream().map(UserPropertyEntity::get_id).noneMatch(id -> id.equals(currentUser.get_id()))) {
+            if (gameToPlay.isFull()) {
+                throw new BadHttpRequest(new IllegalStateException("Game is already full"));
+            }
+            gameToPlay.getPlayers().add(UserPropertyEntity.builder()
+                            ._id(currentUser.get_id())
+                            .username(currentUser.getUsername())
+                            .email(currentUser.getEmail())
+                            .birthYear(currentUser.getBirthYear())
+                            .password(currentUser.getPassword())
+                    .build());
+            return gameRepository.save(gameToPlay);
+        } else {
+            return gameToPlay;
+        }
     }
 
     @Override
