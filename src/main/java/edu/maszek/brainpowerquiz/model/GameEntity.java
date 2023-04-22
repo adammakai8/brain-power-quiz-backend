@@ -34,5 +34,8 @@ public class GameEntity {
     private List<ThemePropertyEntity> themes;
     @NotNull
     @DBRef
+    private List<UserPropertyEntity> players;
+    @NotNull
+    @DBRef
     private List<QuestionPropertyEntity> questions;
 }
