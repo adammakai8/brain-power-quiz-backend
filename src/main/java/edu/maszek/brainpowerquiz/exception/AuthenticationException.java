@@ -5,7 +5,4 @@ public class AuthenticationException extends Exception {
         super(message);
     }
     public static String AlreadyExists(String name) { return "User " + name + " already exist!"; }
-    public static String LoginFailed() {
-        return "Invalid username or password!";
-    }
 }

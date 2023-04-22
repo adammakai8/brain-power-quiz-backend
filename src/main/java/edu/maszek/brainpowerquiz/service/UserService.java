@@ -1,10 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
-import edu.maszek.brainpowerquiz.auth.AuthenticationResponse;
-import edu.maszek.brainpowerquiz.auth.RegisterRequest;
 import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.model.UserEntity;
-import jakarta.validation.ConstraintViolationException;
 
 import java.util.List;
 

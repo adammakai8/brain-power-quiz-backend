@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/themes")
 public class ThemeController {
@@ -41,6 +39,7 @@ public class ThemeController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> createTheme(@RequestBody ThemeEntity themeEntity) {
         try {
@@ -53,6 +52,7 @@ public class ThemeController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update")
     public ResponseEntity<?> updateTheme(@RequestBody ThemeEntity themeEntity) {
         try {
@@ -65,6 +65,7 @@ public class ThemeController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteThemeByID(@PathVariable("id") String id) {
         try {
