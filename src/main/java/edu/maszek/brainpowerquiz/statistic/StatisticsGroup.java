@@ -9,9 +9,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StatisticsGroup {
     String groupName;
-    Integer averagePoints;
+    Double averagePoints;
     Double correctAnswerRatioEasy;
     Double correctAnswerRatioMedium;
     Double correctAnswerRatioHard;
     Double correctAnswerRatioAll;
+
+    public StatisticsGroup(
+            int currIndex,
+            int range,
+            Double averagePoints,
+            Double correctAnswerRatioEasy,
+            Double correctAnswerRatioMedium,
+            Double correctAnswerRatioHard,
+            Double correctAnswerRatioAll) {
+        this(Math.max(1, currIndex * range) + "-" + (currIndex + 1) * range,
+                averagePoints,
+                correctAnswerRatioEasy,
+                correctAnswerRatioMedium,
+                correctAnswerRatioHard,
+                correctAnswerRatioAll);
+    }
 }

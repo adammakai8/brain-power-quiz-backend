@@ -1,6 +1,7 @@
 package edu.maszek.brainpowerquiz.model.property;
 
 
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +20,9 @@ public class ThemePropertyEntity {
     private String _id;
     @Indexed(unique = true)
     private String text;
+
+    public ThemePropertyEntity(ThemeEntity themeEntity) {
+        this._id = themeEntity.get_id();
+        this.text = themeEntity.getText();
+    }
 }

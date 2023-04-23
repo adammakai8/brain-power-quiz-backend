@@ -1,6 +1,7 @@
 package edu.maszek.brainpowerquiz.statistic;
 
 import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
