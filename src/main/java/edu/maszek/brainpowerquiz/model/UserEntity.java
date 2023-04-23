@@ -1,7 +1,6 @@
 package edu.maszek.brainpowerquiz.model;
 
 import edu.maszek.brainpowerquiz.role.Role;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -63,5 +64,9 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Integer getAge() {
+        return LocalDate.now().getYear() - birthYear;
     }
 }

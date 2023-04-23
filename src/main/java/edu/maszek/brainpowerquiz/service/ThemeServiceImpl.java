@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ThemeServiceImpl implements ThemeService{
+public class ThemeServiceImpl implements ThemeService {
     @Autowired
     private ThemeRepository themeRepository;
     @Autowired
