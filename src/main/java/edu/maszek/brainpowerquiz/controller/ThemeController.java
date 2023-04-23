@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.ThemeCollectionException;
-import edu.maszek.brainpowerquiz.model.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
 import edu.maszek.brainpowerquiz.service.ThemeService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;

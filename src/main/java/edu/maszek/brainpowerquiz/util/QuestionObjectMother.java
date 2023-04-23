@@ -1,8 +1,8 @@
 package edu.maszek.brainpowerquiz.util;
 
-import edu.maszek.brainpowerquiz.model.Answer;
-import edu.maszek.brainpowerquiz.model.QuestionEntity;
-import edu.maszek.brainpowerquiz.model.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.AnswerOption;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 
 import java.util.List;
@@ -1705,7 +1705,7 @@ public class QuestionObjectMother {
     private static QuestionEntity createQuestion(
             final String text,
             final Integer difficulty,
-            final List<Answer> answers,
+            final List<AnswerOption> answers,
             final List<ThemePropertyEntity> themes
     ) {
         return QuestionEntity.builder()
@@ -1716,8 +1716,8 @@ public class QuestionObjectMother {
                 .build();
     }
 
-    private static Answer createAnswer(final String text, final boolean isCorrect) {
-        return Answer.builder()
+    private static AnswerOption createAnswer(final String text, final boolean isCorrect) {
+        return AnswerOption.builder()
                 .text(text)
                 .isCorrect(isCorrect)
                 .build();

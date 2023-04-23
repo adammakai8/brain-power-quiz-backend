@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.UserCollectionException;
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

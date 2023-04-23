@@ -1,6 +1,6 @@
 package edu.maszek.brainpowerquiz.service;
 
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

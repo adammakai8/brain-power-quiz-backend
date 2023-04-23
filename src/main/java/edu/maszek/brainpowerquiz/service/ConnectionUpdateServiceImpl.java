@@ -1,6 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
-import edu.maszek.brainpowerquiz.model.*;
+import edu.maszek.brainpowerquiz.model.entity.*;
+import edu.maszek.brainpowerquiz.model.property.*;
 import edu.maszek.brainpowerquiz.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

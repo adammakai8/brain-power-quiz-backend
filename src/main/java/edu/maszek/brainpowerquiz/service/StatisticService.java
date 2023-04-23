@@ -1,6 +1,6 @@
 package edu.maszek.brainpowerquiz.service;
 
-import edu.maszek.brainpowerquiz.model.AnswerEntity;
+import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
 import edu.maszek.brainpowerquiz.statistic.ThemeCountInGames;
 
 import java.util.List;

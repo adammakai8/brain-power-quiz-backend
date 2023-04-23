@@ -1,5 +1,7 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.entity;
 
+import edu.maszek.brainpowerquiz.model.property.GamePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.QuestionPropertyEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

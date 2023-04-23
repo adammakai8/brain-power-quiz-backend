@@ -1,8 +1,8 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.QuestionCollectionException;
-import edu.maszek.brainpowerquiz.model.Answer;
-import edu.maszek.brainpowerquiz.model.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.property.AnswerOption;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private boolean checkCorrectAnswerCount(QuestionEntity questionEntity) {
-        long count = questionEntity.getAnswers().stream().filter(Answer::getIsCorrect).count();
+        long count = questionEntity.getAnswers().stream().filter(AnswerOption::getIsCorrect).count();
         return count <= 1;
     }
 }

@@ -1,6 +1,10 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.entity;
 
 import javax.validation.constraints.NotNull;
+
+import edu.maszek.brainpowerquiz.model.property.QuestionPropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

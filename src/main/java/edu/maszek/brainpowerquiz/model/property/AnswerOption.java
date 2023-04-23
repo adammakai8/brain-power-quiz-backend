@@ -1,4 +1,4 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.property;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Answer {
+public class AnswerOption {
     @NotNull
     private String text;
     @NotNull

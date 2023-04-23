@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.UserCollectionException;
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.service.UserService;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;

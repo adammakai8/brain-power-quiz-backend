@@ -1,6 +1,6 @@
 package edu.maszek.brainpowerquiz.repository;
 
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

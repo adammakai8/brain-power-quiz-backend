@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ThemeCollectionException;
-import edu.maszek.brainpowerquiz.model.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
 import jakarta.validation.ConstraintViolationException;
 
 import java.util.List;

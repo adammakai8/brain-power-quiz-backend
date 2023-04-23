@@ -1,5 +1,6 @@
 package edu.maszek.brainpowerquiz.model;
 
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.Max;

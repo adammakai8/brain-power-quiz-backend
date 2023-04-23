@@ -4,7 +4,7 @@ import edu.maszek.brainpowerquiz.auth.AuthenticationRequest;
 import edu.maszek.brainpowerquiz.auth.AuthenticationResponse;
 import edu.maszek.brainpowerquiz.auth.RegisterRequest;
 import edu.maszek.brainpowerquiz.exception.AuthenticationException;
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.repository.RoleRepository;
 import edu.maszek.brainpowerquiz.repository.TokenRepository;
 import edu.maszek.brainpowerquiz.repository.UserRepository;

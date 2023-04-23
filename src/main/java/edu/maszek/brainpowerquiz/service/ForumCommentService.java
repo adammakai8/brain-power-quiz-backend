@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ForumCommentCollectionException;
-import edu.maszek.brainpowerquiz.model.ForumCommentEntity;
+import edu.maszek.brainpowerquiz.model.entity.ForumCommentEntity;
 import jakarta.validation.ConstraintViolationException;
 
 import java.util.List;

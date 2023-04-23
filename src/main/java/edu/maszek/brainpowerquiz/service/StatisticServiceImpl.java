@@ -1,12 +1,11 @@
 package edu.maszek.brainpowerquiz.service;
 
-import edu.maszek.brainpowerquiz.model.AnswerEntity;
-import edu.maszek.brainpowerquiz.model.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import edu.maszek.brainpowerquiz.repository.AnswerRepository;
 import edu.maszek.brainpowerquiz.repository.ThemeRepository;
 import edu.maszek.brainpowerquiz.repository.UserRepository;
 import edu.maszek.brainpowerquiz.statistic.ThemeCountInGames;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.statistic;
 
-import edu.maszek.brainpowerquiz.model.Answer;
-import edu.maszek.brainpowerquiz.model.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.AnswerOption;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +36,7 @@ public class QuestionStatisticEntity {
     private Integer difficulty;
     @NotNull
     @Size(min = 4, max = 4)
-    private List<Answer> answers;
+    private List<AnswerOption> answers;
     @NotNull
     @DBRef
     private List<ThemePropertyEntity> themes;

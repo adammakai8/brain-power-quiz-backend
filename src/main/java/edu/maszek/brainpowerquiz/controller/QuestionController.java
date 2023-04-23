@@ -1,7 +1,7 @@
 package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.QuestionCollectionException;
-import edu.maszek.brainpowerquiz.model.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
 import edu.maszek.brainpowerquiz.service.QuestionService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/questions")

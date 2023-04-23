@@ -1,5 +1,7 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.entity;
 
+import edu.maszek.brainpowerquiz.model.property.ForumCommentPropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.ForumPropertyEntity;
 import edu.maszek.brainpowerquiz.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

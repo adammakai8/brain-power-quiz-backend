@@ -2,11 +2,11 @@ package edu.maszek.brainpowerquiz.config;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
-import edu.maszek.brainpowerquiz.model.QuestionEntity;
-import edu.maszek.brainpowerquiz.model.QuestionPropertyEntity;
-import edu.maszek.brainpowerquiz.model.ThemeEntity;
-import edu.maszek.brainpowerquiz.model.ThemePropertyEntity;
-import edu.maszek.brainpowerquiz.model.UserEntity;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.property.QuestionPropertyEntity;
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
 import edu.maszek.brainpowerquiz.repository.RoleRepository;
 import edu.maszek.brainpowerquiz.repository.ThemeRepository;

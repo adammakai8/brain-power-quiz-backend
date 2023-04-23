@@ -1,4 +1,4 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.property;
 
 import javax.validation.constraints.NotNull;
 

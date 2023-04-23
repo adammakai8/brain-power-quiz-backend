@@ -1,29 +1,30 @@
-package edu.maszek.brainpowerquiz.model;
+package edu.maszek.brainpowerquiz.model.property;
 
 import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="forum")
-public class ForumEntity {
+@Document(collection="question")
+public class QuestionPropertyEntity {
     @Id
     private String _id;
     @NotNull
-    private String question;
+    private String text;
     @NotNull
-    @DBRef
-    private UserPropertyEntity author;
-    @DBRef
-    private List<ForumCommentPropertyEntity> comments;
+    private Integer difficulty;
+    @NotNull
+    private List<AnswerOption> answers;
 }

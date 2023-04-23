@@ -3,19 +3,22 @@ package edu.maszek.brainpowerquiz.service;
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
 import edu.maszek.brainpowerquiz.exception.UserCollectionException;
 import edu.maszek.brainpowerquiz.model.*;
+import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
+import edu.maszek.brainpowerquiz.model.entity.GameEntity;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
+import edu.maszek.brainpowerquiz.model.property.QuestionPropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
+import edu.maszek.brainpowerquiz.repository.AnswerRepository;
 import edu.maszek.brainpowerquiz.repository.GameRepository;
 import edu.maszek.brainpowerquiz.repository.QuestionRepository;
-import edu.maszek.brainpowerquiz.repository.UserRepository;
 import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,8 @@ public class GameServiceImpl implements GameService {
     private GameRepository gameRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -37,20 +42,21 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameEntity getGameByID(String id) throws GameCollectionException {
+    public GameEntity getGameByID(final String id) throws GameCollectionException {
         Optional<GameEntity> game = gameRepository.findById(id);
         if(game.isPresent()) return game.get();
         else throw new GameCollectionException(GameCollectionException.NotFoundException(id));
     }
 
-    public GameEntity getGameByName(String name) throws GameCollectionException {
+    public GameEntity getGameByName(final String name) throws GameCollectionException {
         Optional<GameEntity> game = gameRepository.findByName(name);
         if(game.isPresent()) return game.get();
         else throw new GameCollectionException(GameCollectionException.NotFoundByNameException(name));
     }
 
     @Override
-    public GameEntity startGame(String gameId, String username) throws UserCollectionException, GameCollectionException, BadHttpRequest {
+    public GameEntity startGame(final String gameId, final String username)
+            throws UserCollectionException, GameCollectionException, BadHttpRequest {
         final UserEntity currentUser = userService.getUserByName(username);
 
         final GameEntity gameToPlay = getGameByID(gameId);
@@ -61,13 +67,7 @@ public class GameServiceImpl implements GameService {
             if (gameToPlay.isFull()) {
                 throw new BadHttpRequest(new IllegalStateException("Game is already full"));
             }
-            gameToPlay.getPlayers().add(UserPropertyEntity.builder()
-                            ._id(currentUser.get_id())
-                            .username(currentUser.getUsername())
-                            .email(currentUser.getEmail())
-                            .birthYear(currentUser.getBirthYear())
-                            .password(currentUser.getPassword())
-                    .build());
+            gameToPlay.getPlayers().add(mapUserToProperty(currentUser));
             return gameRepository.save(gameToPlay);
         } else {
             return gameToPlay;
@@ -75,7 +75,20 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameEntity createGame(GameCreationData gameData) {
+    public void submitQuiz(final AnswerEntityCreationData[] answers, final String username) throws UserCollectionException {
+        final UserEntity player = userService.getUserByName(username);
+        answerRepository.saveAll(Arrays.stream(answers)
+                .map(answer -> AnswerEntity.builder()
+                        .point(answer.getPoint())
+                        .user(mapUserToProperty(player))
+                        .game(answer.getGame())
+                        .question(answer.getQuestion())
+                        .build())
+                .collect(Collectors.toList()));
+    }
+
+    @Override
+    public GameEntity createGame(final GameCreationData gameData) {
         final List<String> gameThemeIds = gameData.getThemes().stream().map(ThemePropertyEntity::get_id).toList();
         final List<QuestionEntity> questionsOfThemes = questionRepository.findAll().stream()
                 .filter(question -> question.getThemes().stream()
@@ -105,7 +118,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void updateGame(GameEntity gameEntity) throws GameCollectionException {
+    public void updateGame(final GameEntity gameEntity) throws GameCollectionException {
         String gameID = gameEntity.get_id();
         Optional<GameEntity> gameOptional = gameRepository.findById(gameID);
 
@@ -122,7 +135,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void deleteGameByID(String id) throws GameCollectionException {
+    public void deleteGameByID(final String id) throws GameCollectionException {
         Optional<GameEntity> gameOptional = gameRepository.findById(id);
         if(gameOptional.isPresent()) {
             GameEntity gameEntity = gameOptional.get();
@@ -150,5 +163,15 @@ public class GameServiceImpl implements GameService {
                     Collections.shuffle(list);
                     return list;
                 })).subList(0, questionQuantity);
+    }
+
+    private UserPropertyEntity mapUserToProperty(final UserEntity user) {
+        return UserPropertyEntity.builder()
+                ._id(user.get_id())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .birthYear(user.getBirthYear())
+                .password(user.getPassword())
+                .build();
     }
 }

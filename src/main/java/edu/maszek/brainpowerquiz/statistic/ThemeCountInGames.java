@@ -1,11 +1,9 @@
 package edu.maszek.brainpowerquiz.statistic;
 
-import edu.maszek.brainpowerquiz.model.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
