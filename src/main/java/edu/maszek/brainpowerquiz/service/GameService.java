@@ -14,6 +14,7 @@ public interface GameService {
     public List<GameEntity> getAllGames();
     public GameEntity getGameByID(String id) throws GameCollectionException;
     public GameEntity getGameByName(String name) throws GameCollectionException;
+    List<String> getPlayedGamesByUser(String username);
     GameEntity startGame(String gameId, String username) throws UserCollectionException, GameCollectionException, BadHttpRequest;
     void submitQuiz(AnswerEntityCreationData[] answers, String username) throws UserCollectionException;
     public GameEntity createGame(GameCreationData gameEntity) throws ConstraintViolationException, GameCollectionException;

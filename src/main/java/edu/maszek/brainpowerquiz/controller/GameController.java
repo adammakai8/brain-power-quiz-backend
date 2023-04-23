@@ -46,6 +46,11 @@ public class GameController {
         }
     }
 
+    @GetMapping("/played")
+    public ResponseEntity<?> getPlayedGameIds(final Principal principal) {
+        return new ResponseEntity<>(gameService.getPlayedGamesByUser(principal.getName()), HttpStatus.OK);
+    }
+
     @PostMapping("/start/{gameId}")
     public ResponseEntity<?> startGame(final @PathVariable("gameId") String gameId, final Principal principal)
             throws UserCollectionException, GameCollectionException, BadHttpRequest {

@@ -55,6 +55,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public List<String> getPlayedGamesByUser(String username) {
+        return answerRepository.findAll().stream()
+                .filter(answer -> answer.getUser().getUsername().equals(username))
+                .collect(Collectors.groupingBy(answer -> answer.getGame().get_id()))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue().size() == 10)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public GameEntity startGame(final String gameId, final String username)
             throws UserCollectionException, GameCollectionException, BadHttpRequest {
         final UserEntity currentUser = userService.getUserByName(username);
