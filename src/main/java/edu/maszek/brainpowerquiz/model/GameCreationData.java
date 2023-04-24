@@ -1,6 +1,7 @@
 package edu.maszek.brainpowerquiz.model;
 
 import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.Max;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class GameCreationData {
     @NotNull
