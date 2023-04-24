@@ -121,11 +121,12 @@ public class GameServiceImpl implements GameService {
                 .closeDate(gameData.getCloseDate())
                 .themes(gameData.getThemes())
                 .questions(generatedQuestions)
+                .players(new ArrayList<>())
                 .build();
-        gameRepository.save(gameEntity);
-        connectionUpdateService.updateThemeConnection("game", gameEntity, "create");
-        connectionUpdateService.updateQuestionConnection("game", gameEntity, "create");
-        return gameEntity;
+        final GameEntity saveGame = gameRepository.save(gameEntity);
+        connectionUpdateService.updateThemeConnection("game", saveGame, "create");
+        connectionUpdateService.updateQuestionConnection("game", saveGame, "create");
+        return saveGame;
     }
 
     @Override
