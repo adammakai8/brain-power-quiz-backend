@@ -1,7 +1,9 @@
 package edu.maszek.brainpowerquiz.service;
 
+import edu.maszek.brainpowerquiz.model.UserRanklist;
 import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
 import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import edu.maszek.brainpowerquiz.repository.AnswerRepository;
 import edu.maszek.brainpowerquiz.repository.ThemeRepository;
@@ -64,6 +66,14 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
+    public List<UserRanklist> getRanklist() {
+        final List<AnswerEntity> answers = answerRepository.findAll();
+        return userRepository.findAll().stream()
+                .map(user -> new UserRanklist(user, getPointSum(answers, user)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ThemeCountInGames> getUserFavouriteThemes(String _id) {
         // get all answerEntity
         List<AnswerEntity> answers = answerRepository.findAll();
@@ -109,6 +119,12 @@ public class StatisticServiceImpl implements StatisticService {
         }
 
         return new UserStatistics(averagePoints, answersByDifficulty, answersByTheme);
+    }
+
+    private Integer getPointSum(final List<AnswerEntity> answers, final UserEntity user) {
+        return answers.stream().filter(ans -> ans.getUser().get_id().equals(user.get_id()))
+                .mapToInt(AnswerEntity::getPoint)
+                .sum();
     }
 
     private void addNewStatisticsGroupToTheResults(List<AnswerEntity> currentAnswers, List<StatisticsGroup> results, int i) {

@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> getAllUsers() {
-        List<UserEntity> usersOptional = userRepository.findAll();
+        final List<UserEntity> usersOptional = userRepository.findAll();
         if(usersOptional.size() > 0) return usersOptional;
         else return new ArrayList<>();
     }
