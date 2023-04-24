@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -44,6 +45,6 @@ public class GameEntity {
     private List<QuestionPropertyEntity> questions;
 
     public boolean isFull() {
-        return players.size() == maximalPlayerNumber;
+        return (Objects.isNull(players) ? 0 : players.size()) == maximalPlayerNumber;
     }
 }

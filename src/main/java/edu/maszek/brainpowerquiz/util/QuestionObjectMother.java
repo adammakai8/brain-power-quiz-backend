@@ -201,16 +201,6 @@ public class QuestionObjectMother {
                         List.of(themes.get(MATEMATIKA))
                 ),
                 createQuestion(
-                        "Melyik szám prím?", 1,
-                        List.of(
-                                createAnswer("183", false),
-                                createAnswer("117", false),
-                                createAnswer("1", false),
-                                createAnswer("193", true)
-                        ),
-                        List.of(themes.get(MATEMATIKA))
-                ),
-                createQuestion(
                         "Melyik síkidom NEM tengelyesen szimmetrikus?", 1,
                         List.of(
                                 createAnswer("négyzet", false),
