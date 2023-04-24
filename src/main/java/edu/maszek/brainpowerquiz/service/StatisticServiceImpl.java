@@ -137,8 +137,7 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     private Double calculateAveragePoint(List<AnswerEntity> currentAnswers) {
-        return (double)
-                (currentAnswers.size() == 0 ? 0 : currentAnswers.stream().map(AnswerEntity::getPoint).mapToInt(Integer::intValue).sum() / currentAnswers.size());
+        return currentAnswers.size() == 0 ? 0 : currentAnswers.stream().map(AnswerEntity::getPoint).mapToDouble(Integer::doubleValue).sum() / currentAnswers.size();
     }
 
     private Double calculateCorrectAnswerRatio(List<AnswerEntity> currentAnswers) {
@@ -146,16 +145,23 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     private Double calculateCorrectAnswerRatio(List<AnswerEntity> currentAnswers, int difficulty) {
-        if(currentAnswers.size() == 0
-                || currentAnswers.stream().filter(answerEntity -> answerEntity.getQuestion().getDifficulty() == difficulty).toList().size() == 0)
-            return 0.;
-        return (double) (currentAnswers.stream()
+        if(currentAnswers.size() == 0 ||
+                (difficulty != -1 && isEmptyWithDifficulty(currentAnswers, difficulty)))
+            return 0d;
+
+        return (double) currentAnswers.stream()
                         .filter(answerEntity -> answerEntity.getPoint() > 0
                                 && (difficulty < 0 || answerEntity.getQuestion().getDifficulty() == difficulty))
                         .toList().size()
                         /
                         (difficulty < 0 ?
                                 currentAnswers.size():
-                                currentAnswers.stream().filter(answerEntity -> answerEntity.getQuestion().getDifficulty() == difficulty).toList().size()));
+                                currentAnswers.stream().filter(answerEntity -> answerEntity.getQuestion().getDifficulty() == difficulty).toList().size());
+    }
+
+    private boolean isEmptyWithDifficulty(final List<AnswerEntity> currentAnswers, final int difficulty) {
+        return currentAnswers.stream()
+                .filter(answerEntity -> answerEntity.getQuestion().getDifficulty() == difficulty)
+                .toList().size() == 0;
     }
 }
