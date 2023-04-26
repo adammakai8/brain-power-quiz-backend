@@ -111,7 +111,7 @@ public class ConnectionUpdateServiceImpl {
 
     private void updateForumCommentForumConnection(ForumEntity object, String mode, ForumCommentRepository repository, List<ForumCommentEntity> forumcomments) {
         if(object.getComments() == null) return;
-        List<String> forum_commentIDs_from_forum = object.getComments().stream().map(ForumCommentPropertyEntity::get_id).toList();
+        List<String> forum_commentIDs_from_forum = object.getComments().stream().map(ForumCommentEntity::get_id).toList();
         forumcomments = forumcomments.stream().filter(forumcomment -> forum_commentIDs_from_forum.contains(forumcomment.get_id())).collect(Collectors.toList());
         if (mode.equals("delete")) {
             for (ForumCommentEntity forumcomment : forumcomments) {
@@ -185,15 +185,19 @@ public class ConnectionUpdateServiceImpl {
         if (mode.equals("create")) {
             for (ForumEntity forum : forums) {
                 if (forum.getComments() != null) {
-                    forum.getComments().add(new ForumCommentPropertyEntity(
+                    forum.getComments().add(new ForumCommentEntity(
                             object.get_id(),
-                            object.getText()
+                            object.getText(),
+                            object.getParent(),
+                            object.getAuthor()
                     ));
                 } else {
                     forum.setComments(new ArrayList<>() {{
-                        add(new ForumCommentPropertyEntity(
+                        add(new ForumCommentEntity(
                                 object.get_id(),
-                                object.getText()
+                                object.getText(),
+                                object.getParent(),
+                                object.getAuthor()
                         ));
                     }});
                 }

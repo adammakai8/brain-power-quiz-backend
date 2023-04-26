@@ -28,4 +28,10 @@ public class ForumCommentEntity {
     @NotNull
     @DBRef
     private UserPropertyEntity author;
+
+    public ForumCommentEntity(String text, ForumEntity forum, UserPropertyEntity user) {
+        this.text = text;
+        this.parent = new ForumPropertyEntity(forum);
+        this.author = user;
+    }
 }

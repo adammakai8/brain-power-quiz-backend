@@ -2,6 +2,7 @@ package edu.maszek.brainpowerquiz.controller;
 
 import edu.maszek.brainpowerquiz.exception.ForumCommentCollectionException;
 import edu.maszek.brainpowerquiz.model.entity.ForumCommentEntity;
+import edu.maszek.brainpowerquiz.model.request.ForumCommentRequest;
 import edu.maszek.brainpowerquiz.service.ForumCommentService;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,12 @@ public class ForumCommentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createForumComment(@RequestBody ForumCommentEntity forumCommentEntity) {
+    public ResponseEntity<?> createForumComment(@RequestBody ForumCommentRequest forumCommentRequest) {
         try {
-            forumCommentService.createForumComment(forumCommentEntity);
+            forumCommentService.createForumComment(forumCommentRequest);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ForumCommentCollectionException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
