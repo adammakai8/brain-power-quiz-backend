@@ -2,7 +2,10 @@ package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ForumCommentCollectionException;
 import edu.maszek.brainpowerquiz.model.entity.ForumCommentEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
+import edu.maszek.brainpowerquiz.model.request.ForumCommentRequest;
 import edu.maszek.brainpowerquiz.repository.ForumCommentRepository;
+import edu.maszek.brainpowerquiz.repository.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ import java.util.Optional;
 public class ForumCommentServiceImpl implements ForumCommentService {
     @Autowired
     private ForumCommentRepository forumCommentRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ConnectionUpdateServiceImpl connectionUpdateService;
 
@@ -33,7 +38,16 @@ public class ForumCommentServiceImpl implements ForumCommentService {
     }
 
     @Override
-    public void createForumComment(ForumCommentEntity forumCommentEntity) throws ConstraintViolationException {
+    public void createForumComment(ForumCommentRequest forumCommentRequest) throws ConstraintViolationException, ForumCommentCollectionException {
+        if(forumCommentRequest.getText().length() > 250)
+            throw new ForumCommentCollectionException(ForumCommentCollectionException.TooLongAnswer());
+
+        UserPropertyEntity user = new UserPropertyEntity(userRepository.findByUsername(forumCommentRequest.getAuthor()).get());
+        ForumCommentEntity forumCommentEntity =
+                new ForumCommentEntity(
+                        forumCommentRequest.getText(),
+                        forumCommentRequest.getParent(),
+                        user);
         forumCommentRepository.save(forumCommentEntity);
         connectionUpdateService.updateForumConnection("forumcomment", forumCommentEntity, "create");
         connectionUpdateService.updateUserConnection("forumcomment", forumCommentEntity, "create");

@@ -2,7 +2,10 @@ package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.exception.ForumCollectionException;
 import edu.maszek.brainpowerquiz.model.entity.ForumEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
+import edu.maszek.brainpowerquiz.model.request.ForumRequest;
 import edu.maszek.brainpowerquiz.repository.ForumRepository;
+import edu.maszek.brainpowerquiz.repository.UserRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ import java.util.Optional;
 public class ForumServiceImpl implements ForumService {
     @Autowired
     private ForumRepository forumRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ConnectionUpdateServiceImpl connectionUpdateService;
 
@@ -33,7 +38,11 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public void createForum(ForumEntity forumEntity) throws ConstraintViolationException {
+    public void createForum(ForumRequest forumRequest) throws ConstraintViolationException, ForumCollectionException {
+        if(forumRequest.getQuestion().length() > 250) throw new ForumCollectionException(ForumCollectionException.TooLongQuestion());
+
+        UserPropertyEntity user = new UserPropertyEntity(userRepository.findByUsername(forumRequest.getAuthor()).get());
+        ForumEntity forumEntity = new ForumEntity(forumRequest.getQuestion(), user);
         forumRepository.save(forumEntity);
         connectionUpdateService.updateUserConnection("forum", forumEntity, "create");
     }

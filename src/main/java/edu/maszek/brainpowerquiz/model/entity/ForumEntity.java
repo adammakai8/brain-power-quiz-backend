@@ -3,6 +3,7 @@ package edu.maszek.brainpowerquiz.model.entity;
 import javax.validation.constraints.NotNull;
 
 import edu.maszek.brainpowerquiz.model.property.ForumCommentPropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.ForumPropertyEntity;
 import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,5 +29,10 @@ public class ForumEntity {
     @DBRef
     private UserPropertyEntity author;
     @DBRef
-    private List<ForumCommentPropertyEntity> comments;
+    private List<ForumCommentEntity> comments;
+
+    public ForumEntity(String question, UserPropertyEntity user) {
+        this.question = question;
+        this.author = user;
+    }
 }

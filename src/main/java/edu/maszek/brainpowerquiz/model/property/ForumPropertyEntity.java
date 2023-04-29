@@ -1,6 +1,8 @@
 package edu.maszek.brainpowerquiz.model.property;
 
 import javax.validation.constraints.NotNull;
+
+import edu.maszek.brainpowerquiz.model.entity.ForumEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +20,9 @@ public class ForumPropertyEntity {
     private String _id;
     @NotNull
     private String question;
+
+    public ForumPropertyEntity(ForumEntity forumEntity) {
+        this._id = forumEntity.get_id();
+        this.question = forumEntity.getQuestion();
+    }
 }
