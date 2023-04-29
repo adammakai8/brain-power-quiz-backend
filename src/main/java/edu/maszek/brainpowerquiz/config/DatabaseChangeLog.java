@@ -107,13 +107,13 @@ public class DatabaseChangeLog {
         final List<ThemeEntity> themes = themeRepository.findAll();
 
         GameEntity game1 = gameService.createGame(
-                new GameCreationData("Quiz 1", 8, new Date(2023, Calendar.JUNE, 1), getRandomThemes(themes), 3, 5, 2));
+                new GameCreationData("Quiz 1", 8, new Date(123, Calendar.JUNE, 1), getRandomThemes(themes), 3, 5, 2));
         GameEntity game2 = gameService.createGame(
-                new GameCreationData("Quiz 2", 3, new Date(2023, Calendar.MAY, 17), getRandomThemes(themes), 3, 5, 2));
+                new GameCreationData("Quiz 2", 3, new Date(123, Calendar.MAY, 17), getRandomThemes(themes), 3, 5, 2));
         GameEntity game3 = gameService.createGame(
-                new GameCreationData("Mid March Quiz", 8, new Date(2023, Calendar.MARCH, 15), getRandomThemes(themes), 5, 5, 0));
+                new GameCreationData("Mid March Quiz", 8, new Date(123, Calendar.MARCH, 15), getRandomThemes(themes), 5, 5, 0));
         GameEntity game4 = gameService.createGame(
-                new GameCreationData("Quiz Masters Fall", 10, new Date(2023, Calendar.SEPTEMBER, 1), getRandomThemes(themes), 5, 1, 4));
+                new GameCreationData("Quiz Masters Fall", 10, new Date(123, Calendar.SEPTEMBER, 1), getRandomThemes(themes), 5, 1, 4));
 
         playGame(game1, user1, gameRepository, answerRepository);
         playGame(game1, user2, gameRepository, answerRepository);
