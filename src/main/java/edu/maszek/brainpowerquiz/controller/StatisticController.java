@@ -30,6 +30,11 @@ public class StatisticController {
         return new ResponseEntity<>(statisticService.getRanklist(), HttpStatus.OK);
     }
 
+    @GetMapping("/{gameId}/results")
+    public ResponseEntity<?> getGameResults(@PathVariable("gameId") String gameId) {
+        return new ResponseEntity<>(statisticService.getGameResults(gameId), HttpStatus.OK);
+    }
+
     @GetMapping("/users/{_id}/themes/popular")
     public ResponseEntity<?> getUserFavouriteThemes(@PathVariable("_id") String _id) {
         return new ResponseEntity<>(statisticService.getUserFavouriteThemes(_id), HttpStatus.OK);

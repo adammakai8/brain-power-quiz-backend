@@ -2,10 +2,12 @@ package edu.maszek.brainpowerquiz.service;
 
 import edu.maszek.brainpowerquiz.model.UserRanklist;
 import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
+import edu.maszek.brainpowerquiz.model.entity.GameEntity;
 import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
-import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
 import edu.maszek.brainpowerquiz.repository.AnswerRepository;
+import edu.maszek.brainpowerquiz.repository.GameRepository;
 import edu.maszek.brainpowerquiz.repository.ThemeRepository;
 import edu.maszek.brainpowerquiz.repository.UserRepository;
 import edu.maszek.brainpowerquiz.statistic.*;
@@ -24,6 +26,8 @@ public class StatisticServiceImpl implements StatisticService {
     private ThemeRepository themeRepository;
     @Autowired
     private AnswerRepository answerRepository;
+    @Autowired
+    private GameRepository gameRepository;
 
     @Override
     public List<ThemeCountInGames> getThemesByPopularity() {
@@ -69,7 +73,20 @@ public class StatisticServiceImpl implements StatisticService {
     public List<UserRanklist> getRanklist() {
         final List<AnswerEntity> answers = answerRepository.findAll();
         return userRepository.findAll().stream()
-                .map(user -> new UserRanklist(user, getPointSum(answers, user)))
+                .map(user -> new UserRanklist(new UserPropertyEntity(user), getPointSum(answers, user.get_id())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserRanklist> getGameResults(String gameId) {
+        final List<AnswerEntity> answers = answerRepository.findAll().stream()
+                .filter(ans -> ans.getGame().get_id().equals(gameId))
+                .toList();
+        return gameRepository.findById(gameId)
+                .map(GameEntity::getPlayers)
+                .stream()
+                .flatMap(List::stream)
+                .map(user -> new UserRanklist(user, getPointSum(answers, user.get_id())))
                 .collect(Collectors.toList());
     }
 
@@ -121,8 +138,8 @@ public class StatisticServiceImpl implements StatisticService {
         return new UserStatistics(averagePoints, answersByDifficulty, answersByTheme);
     }
 
-    private Integer getPointSum(final List<AnswerEntity> answers, final UserEntity user) {
-        return answers.stream().filter(ans -> ans.getUser().get_id().equals(user.get_id()))
+    private Integer getPointSum(final List<AnswerEntity> answers, final String userId) {
+        return answers.stream().filter(ans -> ans.getUser().get_id().equals(userId))
                 .mapToInt(AnswerEntity::getPoint)
                 .sum();
     }

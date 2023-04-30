@@ -1,6 +1,6 @@
 package edu.maszek.brainpowerquiz.model;
 
-import edu.maszek.brainpowerquiz.model.entity.UserEntity;
+import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
 import lombok.*;
 
 import javax.validation.constraints.Min;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UserRanklist {
     @NotNull
-    private UserEntity user;
+    private UserPropertyEntity user;
     @Min(0)
     private Integer points;
 }

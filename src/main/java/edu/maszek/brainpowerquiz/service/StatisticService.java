@@ -11,6 +11,7 @@ public interface StatisticService {
     public List<ThemeCountInGames> getThemesByPopularity();
     GlobalStatistics getGlobalStatistics();
     List<UserRanklist> getRanklist();
+    List<UserRanklist> getGameResults(String gameId);
     public List<ThemeCountInGames> getUserFavouriteThemes(String username);
     UserStatistics getUserStatistics(String id);
 }
