@@ -135,6 +135,97 @@ public class DatabaseChangeLog {
         playGame(game4, user5, gameRepository, answerRepository);
     }
 
+    @ChangeSet(order = "003", id = "forumAndCommentsTestData", author = "adamax")
+    public void forumAndCommentsTestData(
+            final ForumRepository forumRepository,
+            final ForumCommentRepository forumCommentRepository,
+            final UserRepository userRepository
+    ) {
+        // Admin should be there
+        final UserEntity admin = userRepository.findByUsername("admin").get();
+
+        // Getting other default users
+        final UserEntity user1 = userRepository.findByUsername("John").orElse(createUser(new Role(), "John", 1995));
+        final UserEntity user2 = userRepository.findByUsername("Mary").orElse(createUser(new Role(), "Mary", 1984));
+        final UserEntity user3 = userRepository.findByUsername("Greg").orElse(createUser(new Role(), "Greg", 1971));
+        final UserEntity user4 = userRepository.findByUsername("Amy").orElse(createUser(new Role(), "Amy", 2006));
+        final UserEntity user5 = userRepository.findByUsername("Zun").orElse(createUser(new Role(), "Zun", 1977));
+
+        // Creating forums
+        final ForumEntity forum1 = forumRepository.insert(
+                new ForumEntity("Hogyan számítja a rendszer a pontokat? Nem látom benne a logikát.",
+                        new UserPropertyEntity(user1)));
+        final ForumEntity forum2 = forumRepository.insert(
+                new ForumEntity("A kérdésbank nem lehet, kissé elavult? A megyéket nem írták át vármegyékre.",
+                        new UserPropertyEntity(user2)));
+        final ForumEntity forum3 = forumRepository.insert(
+                new ForumEntity("Túl nagy a különbség nehézség terén, ki mit gondol erről?",
+                        new UserPropertyEntity(user3)));
+
+        // Creating forum comments
+        forumCommentRepository.insert(List.of(
+                // Forum 1
+                new ForumCommentEntity(
+                        "Ez jó kérdés, én is gondolkoztam már ezen... Valaki tudja?",
+                        forum1,
+                        new UserPropertyEntity(user2)),
+                new ForumCommentEntity(
+                        "Nem tudom a részleteket, de a lényeg: minél nehezebb a kérdés annál több pontot kapsz rá, de minél tovább gondolkozol rajta annál kevesebbet.",
+                        forum1,
+                        new UserPropertyEntity(user3)),
+                new ForumCommentEntity(
+                        "Van egy képlet, ami a jó válaszokra számolja a pontokat az idő függvényében, és azt beszorozza a kérdés nehézségi szintjével. Szívesen :D",
+                        forum1,
+                        new UserPropertyEntity(user5)),
+                //Forum 2
+                new ForumCommentEntity(
+                        "Úgy tudom a kérdésbank a régi asztali verzióból lett átemelve, amit 2020 óta nem frissítettek, szólni kell az supportnak (admin)",
+                        forum2,
+                        new UserPropertyEntity(user5)),
+                new ForumCommentEntity(
+                        "Tényleg két földrajzos kérdésnél is látom, szörnyű hogy az adminok ezt nem vették észre :(",
+                        forum2,
+                        new UserPropertyEntity(user4)),
+                new ForumCommentEntity(
+                        "Szerintem nem túl nagy dolog ez, a lényegen nem változtat",
+                        forum2,
+                        new UserPropertyEntity(user1)),
+                new ForumCommentEntity(
+                        "Update: nem csak a vármegyékkel van baj, az angolos kérdéseknél is változtatni kell (rip :/)",
+                        forum2,
+                        new UserPropertyEntity(user2)),
+                new ForumCommentEntity(
+                        "Átvizsgáljuk a kérdésbankot, kijavítjuk a hibákat",
+                        forum2,
+                        new UserPropertyEntity(admin)),
+                new ForumCommentEntity(
+                        "Megvagyunk, elvileg most már minden kérdés up to date",
+                        forum2,
+                        new UserPropertyEntity(admin)),
+                new ForumCommentEntity(
+                        "Igen, most már jó, köszönjük :)",
+                        forum2,
+                        new UserPropertyEntity(user2)),
+                // Forum 3
+                new ForumCommentEntity(
+                        "Skill issue :P",
+                        forum3,
+                        new UserPropertyEntity(user4)),
+                new ForumCommentEntity(
+                        "Valóban néhány kérdés pofon egyszerű, néhányon meg csak pislogok mi ez... De hát valahogy a nagyokosokat is el kell szórakoztatni",
+                        forum2,
+                        new UserPropertyEntity(user2)),
+                new ForumCommentEntity(
+                        "Nem tudom mi a probléma, nekem mindegyik kérdés egyszerűnek tűnik :)",
+                        forum2,
+                        new UserPropertyEntity(user5)),
+                new ForumCommentEntity(
+                        "Viccet félretéve, lehet valaki nem túl jó matekból és azokat a könnyű kérdések is elgondolkodtatják, mások meg még a nehezekre is egyből rányomják a jó megoldást, nem vagyunk egyformák",
+                        forum2,
+                        new UserPropertyEntity(user5))
+        ));
+    }
+
     private void playGame(GameEntity game, final UserEntity player, final GameRepository gameRepository,
                           final AnswerRepository answerRepository) {
         game.getPlayers().add(mapToUserProperty(player));
