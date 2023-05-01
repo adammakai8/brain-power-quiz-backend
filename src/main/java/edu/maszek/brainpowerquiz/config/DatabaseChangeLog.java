@@ -2,19 +2,34 @@ package edu.maszek.brainpowerquiz.config;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
+import edu.maszek.brainpowerquiz.exception.ForumCommentCollectionException;
 import edu.maszek.brainpowerquiz.exception.GameCollectionException;
 import edu.maszek.brainpowerquiz.model.AnswerEntityCreationData;
 import edu.maszek.brainpowerquiz.model.GameCreationData;
-import edu.maszek.brainpowerquiz.model.entity.*;
+import edu.maszek.brainpowerquiz.model.entity.AnswerEntity;
+import edu.maszek.brainpowerquiz.model.entity.ForumEntity;
+import edu.maszek.brainpowerquiz.model.entity.GameEntity;
+import edu.maszek.brainpowerquiz.model.entity.QuestionEntity;
+import edu.maszek.brainpowerquiz.model.entity.ThemeEntity;
+import edu.maszek.brainpowerquiz.model.entity.UserEntity;
 import edu.maszek.brainpowerquiz.model.property.GamePropertyEntity;
 import edu.maszek.brainpowerquiz.model.property.QuestionPropertyEntity;
 import edu.maszek.brainpowerquiz.model.property.ThemePropertyEntity;
 import edu.maszek.brainpowerquiz.model.property.UserPropertyEntity;
-import edu.maszek.brainpowerquiz.repository.*;
+import edu.maszek.brainpowerquiz.model.request.ForumCommentRequest;
+import edu.maszek.brainpowerquiz.repository.AnswerRepository;
+import edu.maszek.brainpowerquiz.repository.ForumRepository;
+import edu.maszek.brainpowerquiz.repository.GameRepository;
+import edu.maszek.brainpowerquiz.repository.QuestionRepository;
+import edu.maszek.brainpowerquiz.repository.RoleRepository;
+import edu.maszek.brainpowerquiz.repository.ThemeRepository;
+import edu.maszek.brainpowerquiz.repository.UserRepository;
 import edu.maszek.brainpowerquiz.role.Role;
+import edu.maszek.brainpowerquiz.service.ForumCommentService;
 import edu.maszek.brainpowerquiz.service.GameService;
 import edu.maszek.brainpowerquiz.statistic.QuestionStatisticEntity;
 import edu.maszek.brainpowerquiz.util.QuestionObjectMother;
+import jakarta.validation.ConstraintViolationException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -138,9 +153,9 @@ public class DatabaseChangeLog {
     @ChangeSet(order = "003", id = "forumAndCommentsTestData", author = "adamax")
     public void forumAndCommentsTestData(
             final ForumRepository forumRepository,
-            final ForumCommentRepository forumCommentRepository,
-            final UserRepository userRepository
-    ) {
+            final UserRepository userRepository,
+            final ForumCommentService forumCommentService
+    ) throws ConstraintViolationException, ForumCommentCollectionException {
         // Admin should be there
         final UserEntity admin = userRepository.findByUsername("admin").get();
 
@@ -163,67 +178,71 @@ public class DatabaseChangeLog {
                         new UserPropertyEntity(user3)));
 
         // Creating forum comments
-        forumCommentRepository.insert(List.of(
+        final List<ForumCommentRequest> comments = List.of(
                 // Forum 1
-                new ForumCommentEntity(
+                new ForumCommentRequest(
                         "Ez jó kérdés, én is gondolkoztam már ezen... Valaki tudja?",
                         forum1,
-                        new UserPropertyEntity(user2)),
-                new ForumCommentEntity(
+                        user2.getUsername()),
+                new ForumCommentRequest(
                         "Nem tudom a részleteket, de a lényeg: minél nehezebb a kérdés annál több pontot kapsz rá, de minél tovább gondolkozol rajta annál kevesebbet.",
                         forum1,
-                        new UserPropertyEntity(user3)),
-                new ForumCommentEntity(
+                        user3.getUsername()),
+                new ForumCommentRequest(
                         "Van egy képlet, ami a jó válaszokra számolja a pontokat az idő függvényében, és azt beszorozza a kérdés nehézségi szintjével. Szívesen :D",
                         forum1,
-                        new UserPropertyEntity(user5)),
+                        user5.getUsername()),
                 //Forum 2
-                new ForumCommentEntity(
+                new ForumCommentRequest(
                         "Úgy tudom a kérdésbank a régi asztali verzióból lett átemelve, amit 2020 óta nem frissítettek, szólni kell az supportnak (admin)",
                         forum2,
-                        new UserPropertyEntity(user5)),
-                new ForumCommentEntity(
+                        user5.getUsername()),
+                new ForumCommentRequest(
                         "Tényleg két földrajzos kérdésnél is látom, szörnyű hogy az adminok ezt nem vették észre :(",
                         forum2,
-                        new UserPropertyEntity(user4)),
-                new ForumCommentEntity(
+                        user4.getUsername()),
+                new ForumCommentRequest(
                         "Szerintem nem túl nagy dolog ez, a lényegen nem változtat",
                         forum2,
-                        new UserPropertyEntity(user1)),
-                new ForumCommentEntity(
+                        user1.getUsername()),
+                new ForumCommentRequest(
                         "Update: nem csak a vármegyékkel van baj, az angolos kérdéseknél is változtatni kell (rip :/)",
                         forum2,
-                        new UserPropertyEntity(user2)),
-                new ForumCommentEntity(
+                        user2.getUsername()),
+                new ForumCommentRequest(
                         "Átvizsgáljuk a kérdésbankot, kijavítjuk a hibákat",
                         forum2,
-                        new UserPropertyEntity(admin)),
-                new ForumCommentEntity(
+                        admin.getUsername()),
+                new ForumCommentRequest(
                         "Megvagyunk, elvileg most már minden kérdés up to date",
                         forum2,
-                        new UserPropertyEntity(admin)),
-                new ForumCommentEntity(
+                        admin.getUsername()),
+                new ForumCommentRequest(
                         "Igen, most már jó, köszönjük :)",
                         forum2,
-                        new UserPropertyEntity(user2)),
+                        user2.getUsername()),
                 // Forum 3
-                new ForumCommentEntity(
+                new ForumCommentRequest(
                         "Skill issue :P",
                         forum3,
-                        new UserPropertyEntity(user4)),
-                new ForumCommentEntity(
+                        user4.getUsername()),
+                new ForumCommentRequest(
                         "Valóban néhány kérdés pofon egyszerű, néhányon meg csak pislogok mi ez... De hát valahogy a nagyokosokat is el kell szórakoztatni",
-                        forum2,
-                        new UserPropertyEntity(user2)),
-                new ForumCommentEntity(
+                        forum3,
+                        user2.getUsername()),
+                new ForumCommentRequest(
                         "Nem tudom mi a probléma, nekem mindegyik kérdés egyszerűnek tűnik :)",
-                        forum2,
-                        new UserPropertyEntity(user5)),
-                new ForumCommentEntity(
+                        forum3,
+                        user5.getUsername()),
+                new ForumCommentRequest(
                         "Viccet félretéve, lehet valaki nem túl jó matekból és azokat a könnyű kérdések is elgondolkodtatják, mások meg még a nehezekre is egyből rányomják a jó megoldást, nem vagyunk egyformák",
-                        forum2,
-                        new UserPropertyEntity(user5))
-        ));
+                        forum3,
+                        user5.getUsername())
+        );
+
+        for (ForumCommentRequest comment : comments) {
+            forumCommentService.createForumComment(comment);
+        }
     }
 
     private void playGame(GameEntity game, final UserEntity player, final GameRepository gameRepository,
